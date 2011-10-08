@@ -1,0 +1,239 @@
+" 0.5.3 (created: 2007/12/21 19:26:07)
+" 0.6pre (created: 2008/04/02 07:30:09)
+" Mappings
+
+" css
+"map ! :set invum<CR>
+
+" set mark-a, jump mark-a
+noremap _ ma
+noremap } `a
+
+"map <C-c> :echo Yank!<CR>Y
+"set guioptions=mTbr
+"set guioptions=mbTBr
+set titlestring=Firefox
+
+"ヒントのスタイルを指定
+hi Hint z-index:5000; font-size:14px; color:white; background-color:blue; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 2px 0px 2px; position:absolute; font-family: Menlo, Consolas, Monaco, monospace; text-transform: uppercase; 
+
+"vimperatorのバージョンが上がった修正する
+"hi Hint font-family:monospace; font-size:12pt; line-height:1.1; color:white; background-color:blue; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 1px 0px 1px; position:absolute;
+
+"set hintstyle=z-index:5000; font-family:monospace; font-size:12px; color:white; background-color:blue; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 1px 0px 1px; position:absolute;
+"ヒント(フォーカス時)のスタイルを指定,20080507バージョンの当たりからなくなった？
+"set focusedhintstyle=z-index:5000; font-family:monospace; font-size:12px; color:ButtonText; background-color:ButtonShadow; border-color:ButtonShadow; border-width:1px; border-style:solid; padding:0px 1px 0px 1px; position:absolute;
+
+" j/k でのスクロール幅を 1行 から 3行 に変更
+noremap j 3<C-e>
+noremap k 3<C-y>
+noremap J <C-d>
+noremap K <C-u>
+
+" h/l や ← → でタブ移動
+noremap <Right> gt
+noremap <Left> gT
+"map <C-l> gt
+"map <C-h> gT
+noremap h gT
+noremap l gt
+noremap <F1> gT
+noremap <F2> gt
+" move current tab left/right
+"map <S-Right> :tablast<CR>
+"map <S-Left> :tabfirst<CR>
+"map <C-L> :tabmove! +1<CR>
+"map <C-H> :tabmove! -1<CR>
+
+" Unhidden and hidden the menubar and the toolbar
+noremap <A-Up> :set guioptions-=TB<CR>
+noremap <A-Down> :set guioptions+=TB<CR>
+
+" ex mode
+cmap <Down> <Tab>
+cmap <Up> <S-Tab>
+
+" Ctrl+C Yank
+noremap <C-c> Y
+
+set verbose=9
+set visualbell
+highlight Bell display:none
+set history=1000
+set complete=sl
+"Tab押さなくても補完
+"set wildoptions=auto
+set newtab=all
+"]]
+"set nextpattern+=next, 次(の)?ページ,\b次.*,→\b,下一頁,Следующая
+"set nextpattern=\bnext\b,\bmore\b,next,^次(の)?ページ,\b次.*,→\b,^>$,^(>>|≫)$,^(>|≫),(>|≫)$
+set nextpattern=\bnext\b,next,^次(の)?ページ,^次へ.*,\b次.*,\bmore\b,→\b,^>$,^(>>|≫)$,^(>|≫),(>|≫)$
+"[[
+"set previouspattern+=prev, 前(の)?ページ,\b前.*,\b←
+"set previouspattern=\bprev|previous\b,prev,^前(の)?ページ,\b前.*,\b←,^<$,^(<<|≪)$,^(<|≪),(<|≪)$
+set previouspattern=\bprev|previous\b,prev,^前(の)?ページ,^前へ.*,\b前.*,\b←,^<$,^(<<|≪)$,^(<|≪),(<|≪)$
+
+" autoignore mode on certain pages
+"autocmd PageLoad .* :js modes.passAllKeys = /gmail\.com/.test(buffer.URL)
+"autocmd PageLoad .* :js modes.passAllKeys = /www\.nicovideo\.jp\/watch/.test(buffer.URL)
+
+"noremap ,q <ESC>:toggleldrc<CR>
+"noremap ,l <ESC>:set ldrc<CR>
+"noremap ,a <ESC>:dialog addbookmark<CR>
+
+noremap B :b<Space>
+
+"copy.js設定
+"map <C-S-c> copy %URL%<CR>
+"map <C-S-t> copy %TITLE%<CR>
+"map <C-S-a> copy anchor<CR>
+"nmap <C-S-c> :copy %TITLE%<CR>
+"noremap <C-S-c> :copy %URL%<CR>
+"let g:copy_templates = "[{label:'URL', value:'%URL%'}]"
+"copy.js
+"copy関係はyを割り当て。
+"a:anchor p:plaintext t:title s:select q:blockquote
+"何も設定しなければyyでurlが取得できた
+"nnremap yy y
+nnoremap ya :copy anchor<CR>
+nnoremap yp :copy titleAndURL<CR>
+nnoremap yt :copy title<CR>
+nnoremap ys :copy selanchor<CR>
+nnoremap yq :copy htmlblockquote<CR>
+
+" ldr_cooperation.js 
+let g:ldrc_captureMappings = "['j', 'k', 'p', 'o', '?']" 
+"let g:ldrc_captureMappings = "['h', 'j', 'k', 'p', 'o']" 
+let g:ldrc_intelligence_bind = "true" 
+
+" googlesuggest
+" noremap s :t<space> 
+
+"set defsearch=g
+"set suggestengines=google,wikipedia,yahoo
+
+"<A-g>でGreasemonkeyをトグル(gmperator.js)
+"map <A-g> :gmset!<CR>
+
+"コマンドモードでC-Vでペースト
+cmap <C-v> <S-Insert>
+imap <C-v> <S-Insert>
+
+let g:ex_ime_mode = "inactive"
+let g:textarea_ime_mode = "inactive"
+
+
+"direct_bookmark グーグルに投げる
+let g:direct_sbm_use_services_by_post="gdph"
+let g:direct_sbm_use_services_by_tag="dph"
+noremap ,s <esc>:sbm<space>[
+
+"gmperator.js toggle enable/disable Greasemonkey
+"noremap ,g :gmset!<CR>
+
+"opera like
+"noremap z :back<CR>
+noremap zz :back<CR>
+noremap x :forward<CR>
+
+"bでページUP
+noremap b <C-b>
+
+"copy.js
+noremap C :copy<Space>
+
+"INSERTモード時にc-[でTextAreaモードに
+imap <c-[> <c-t]
+
+" sbmcommentsviewer.js
+"let g:def_sbm_format = "timestamp,id,tagsAndComment"
+noremap V :viewSBMComments -t h<CR>
+
+"Bookmarkletも補完対象に
+set! browser.urlbar.filter.javascript=false
+set! browser.urlbar.maxRichResults=50
+
+
+"onload時にフォーカスがテキストボックスに取られないように
+"set focuscontent
+
+" char-hintを小文字入力OKなようにする
+"let g:hintsio="i"
+" hintに使用する文字を指定
+set hintchars=ifjklasdhguonmerwc
+
+" 表示する履歴の件数を設定する
+set messages=500
+
+" feedSomeKeys_2.js
+"autocmd LocationChange .* :fmapc
+"" GMAIL
+"autocmd LocationChange mail\\.google\\.com/mail :fmap -depth 4 c / y j k n p o u e x s r a # [ ] z ? gi gs gt gd ga gc gl
+""autocmd LocationChange www\\.google\\.(com|co\\.jp)/reader/view :fmap -vkey / ? n p u m v N P O x o j <Space> k <S-Space> s S A J K = - gs gS gh ga gu gt gd
+"autocmd LocationChange www\\.google\\.(com|co\\.jp)/reader/view :fmap -vkey / ? n p u m v N P O x o j <Space> k <S-Space> s S A J K = gs gS gh ga gu gt gd
+"""        "/", "?", "n", "p", "u", "m", "v", "N", "P", "O", "x", ["o", "O"],
+"""        ["j", "<SPACE>"], ["k", "<S-SPACE>"], ["<SPACE>", "j"], ["<S-SPACE>", "k"], 
+"""        "s", "S", "A", "J", "K", "=", "-", "gs", "gS", "gh", "ga", "gu", "gt", "gd"
+"" Remember the Milk
+"" add / complete / edit / delete tasks
+"autocmd LocationChange https?://www\\.rememberthemilk\\.com/home/[^/]+/#section\\.tasks :fmap C,t c V,p v,d w,f q,g s Q,u W,l S,y I,r U,z <C-1>,1 <C-2>,2 <C-3>,3 <C-0>,4 <Del>
+"" select tasks / tab switch / multiple mode
+"autocmd LocationChange https?://www\\.rememberthemilk\\.com/home/[^/]+/#section\\.tasks :fmap a n k j i h m
+"" list switch
+"autocmd LocationChange https?://www\\.rememberthemilk\\.com/home/[^/]+/#section\\.tasks :fmap <C-H>,<C-S-Left> <C-L>,<C-S-Right>
+ 
+" feedSomeKeys_3.js
+command! -nargs=+ lazy autocmd VimperatorEnter .* <args>
+"command! -nargs=+ lazy autocmd VimperatorEnter .* &lt;args>
+lazy fmaps -u='mail\.google\.com/mail' c / y j k n p o u e x s r a # [ ] ? gi gs gt gd ga gc + *a *n *r *u *s *t <C-v> . ` ~
+"lazy fmaps -u='mail\.google\.com/mail/.*/[0-9a-f]+$' c / j,n k,p n,j p,k o u e x s r a # [ ] ? gi gs gt gd ga gc
+lazy fmaps -u='www\.google\.com/reader' -events=vkeypress j k n p m s v A r S N P X O gh ga gs gt gu u / ? J K
+"lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o : s ? + i
+lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o s ? + i
+lazy fmaps -u='groups\.google\.com/.*' gl gm gs j k v p o s ? / f h a A c u p P n N K
+"fmap -modes=i -events=keydown,keypress <C-p> <Up>
+"fmap -modes=i -events=keydown,keypress <C-n> <Down>
+
+" コマンドモード時補完リストの選択をC-n,C-pで
+cmap <C-n> <TAB>
+cmap <C-p> <S-TAB>
+"imap <C-n> <Down>
+"imap <C-p> <Up>
+
+
+"VISUAL MODE で選択文字列をグーグル検索
+vmap <silent> <C-g> y<Esc><Esc>P
+
+"twitter投稿
+"map ,t :bitly<CR>:<C-v><C-a>twitter<Space>
+"map ,t :<Space>%BITLY%<C-a>twitter<Space>
+
+"テキストエリアでCtrl+iでMacVimで編集する
+set editor='/usr/bin/mvim -f'
+"外部エディタの設定(<C-i>で使えるIts all text相当機能,inputやtextareaを外部エディタで編集)
+"※Windows ではパスを\ではなく/で指定しないとクラッシュすることに注意  http://vimperator.g.hatena.ne.jp/nokturnalmortum/20090305/1236244161
+"エディタにはVimを指定。タブで開きたい...
+"set editor="C:/path/to/vim/gvim.exe -f --remote-tab-silent"
+"...ところだが、タブで開くと他のファイルも全て終了するまで変更を反映できないので、タブで開かない
+"set editor=$HOME.'/Tool/gvim7/gvim.exe -f'
+
+"INSERT MENU mode hack js設定
+"inoremap <C-n> <Down>
+"inoremap <C-p> <Up>
+"imap <C-n> <Down>
+"imap <C-p> <Up>
+
+" abbrev省略
+cabbrev -javascript r 'rosen'
+cabbrev -javascript ro 'rosen'
+
+" zz jj でinsertを抜ける
+"inoremap zz <Esc>:back<CR>
+"inoremap z z
+"inoremap jj <Esc>j
+"inoremap j j
+
+"javascriptでの設定読み込み
+source ~/.vimperatorrc.js
+
+" vim: set ft=vimperator:

@@ -1,0 +1,5 @@
+alias ll='gls -lAFh --color=auto'
+alias la='gls -lAFh --color=auto'
+alias ls='gls -v --color=auto'
+alias hg='hg --encoding=utf-8'
+alias vi='vim'

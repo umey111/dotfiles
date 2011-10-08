@@ -1,0 +1,15 @@
+#
+/*
+/.*
+/.vim/.*
+/.vim/view
+/.vim/autoload
+/.vim/bundle
+!/.vim
+!/.vimrc
+!/.vimshrc
+!/.gitignore
+!/.gvimrc
+!/.bashrc
+!/.vimperatorrc
+!/.vimperatorrc.js
