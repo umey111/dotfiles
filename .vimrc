@@ -884,7 +884,7 @@ function! ToggleSmartWord()
     let s:ToggleSmartWordON=1
   endif
 endfunction
-nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
+"nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
 
 " foldingをh,lで閉じたり開いたりするマッピング {{{
 " 行頭で h を押すと折畳を閉じる。
@@ -1071,6 +1071,11 @@ function! s:unite_project(...)
   let dir = unite#util#path2project_directory(expand('%'))
   execute 'Unite' opts 'file_rec:' . dir
 endfunction
+" ファイル削除時に使用するコマンドの設定
+if has('mac')
+	let g:unite_kind_file_delete_file_command="trash $srcs"
+	let g:unite_kind_file_delete_directory_command="trash $srcs"
+endif
 
 "let g:unite_source_file_rec_ignore_pattern='\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|assets'
 " unite.vim上でのキーマッピング
@@ -1458,6 +1463,19 @@ function! s:todo_my_settings()
 endfunction
 " }}}
 
+" 現在のファイルとカレントディレクトリにある同名のファイルをdiffする {{{
+command! CurrentDiff call s:currentdiff()
+command! CurrentVDiff call s:currentvdiff()
+function! s:currentdiff()
+	let filename = expand("%:t")
+	execute ":diffsplit ".expand("%:t")
+endfunction
+function! s:currentvdiff()
+	let filename = expand("%:t")
+	execute ":vertical diffsplit ".expand("%:t")
+endfunction
+" }}}
+
 " 環境依存設定{{{
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
@@ -1468,5 +1486,5 @@ endif
 if (has('win32') || has('win64')) && filereadable(expand('~/.vimrc.win'))
 	source ~/.vimrc.win
 endif
-"}}}
+" }}}
 
