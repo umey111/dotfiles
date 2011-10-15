@@ -1121,8 +1121,10 @@ function! s:unite_my_settings()
 		nnoremap <buffer><expr> r unite#do_action('rec')
 		inoremap <buffer><expr> r unite#smart_map('r', unite#do_action('rec')) 
 	endif
-	nnoremap <buffer><silent> <C-n> :<C-u>tabnext <CR>
-	nnoremap <buffer><silent> <C-p> :<C-u>tabprevious <CR>
+	"nnoremap <buffer><silent> <C-n> :<C-u>tabnext <CR>
+	"nnoremap <buffer><silent> <C-p> :<C-u>tabprevious <CR>
+	nnoremap <buffer><silent> <C-n> <Plug>(unite_select_next_line)
+	nnoremap <buffer><silent> <C-p> <Plug>(unite_select_previous_line)
 	"nnoremap <buffer><silent> <C-e> unite#do_action('edit')
 endfunction
 
@@ -1225,6 +1227,7 @@ filetype plugin on
 
 " vimproc設定{{{
 let g:vimproc_dll_path = $HOME . '/.vim/autoload/proc.so'
+" }}}
 
 set softtabstop=2
 set tabstop=2
