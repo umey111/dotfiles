@@ -997,6 +997,8 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
 "vimのオムニ補完をneocomplecacheに置き換える
 inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
+" snippetsのフォルダ設定
+let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 " }}}
 
 " unite.vim {{{
