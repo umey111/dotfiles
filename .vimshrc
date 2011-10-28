@@ -1,3 +1,4 @@
+source ~/.bashrc
 alias ll='gls -lAFh --color=auto'
 alias la='gls -lAFh --color=auto'
 alias ls='gls -v --color=auto'

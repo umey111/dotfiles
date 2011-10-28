@@ -170,7 +170,6 @@ nnoremap x "_x
 xnoremap < <gv
 xnoremap > >gv
 
-
 " CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{
 let mapleader = "\<C-w>"
 nnoremap <silent> <Leader>d :<C-u>winpos 0 326<CR>
@@ -179,6 +178,7 @@ nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
 nmap <silent> <Leader>f :<C-u>AfxOpen<CR>
 nmap <silent> <Leader><C-f> :<C-u>AfxOpen<CR>
 unlet mapleader
+" }}}
 
 "Spaceで行移動{{{
 "nnoremap <silent> <Space> <C-D>
@@ -215,14 +215,7 @@ endif
 " AutoCmd memo file {{{
 au BufNewFile,BufRead *.memo			setf memo
 au BufNewFile,BufRead *.vb			setf vbnet
-
-" tabpage切り替え {{{
-"nnoremap <silent> <C-Tab> :tabNext<CR>
-"nnoremap <silent> <C-S-Tab> :tabprevious<CR>
-"vnoremap <silent> <C-Tab> :tabNext<CR>
-"vnoremap <silent> <C-S-Tab> :tabprevious<CR>
-"vinoremap <silent> <C-Tab> :tabNext<CR>
-"vinoremap <silent> <C-S-Tab> :tabprevious<CR>
+" }}}
 
 " デフォルトのtab表示の設定 {{{
 set showtabline=2
@@ -234,33 +227,33 @@ let mapleader = "\<C-w>"
 nnoremap <silent> <Leader><C-t> :<C-u>tab ball<CR>
 nnoremap <silent> <Leader>t :<C-u>tab ball<CR>
 unlet mapleader
-
-" Calendar表示用 {{{
-"let g:mapleader = "\\"
-"nnoremap <silent> <Leader>ca :Calendar<CR>
-"nnoremap <silent> <Leader>ch :CalendarH<CR>
-"unlet g:mapleader
+" }}}
 
 " 現在のバッファの検索結果をvimgrep+quickfixで一覧表示 {{{
 nmap <unique> <F3> :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 
 " match time {{{
 set matchtime=2
+" }}}
 
 " コマンドモード時にカーソル移動するのに便利 {{{
 cmap <C-a> <Home>
 cmap <C-e> <End>
 cmap <C-f> <Right>
 cmap <C-b> <Left>
+" }}}
 
 " 挿入モードでも<A-Space>でシステムメニューを表示 {{{
 imap <A-Space> <ESC>:simalt ~<CR>gi
+" }}}
 
 " Omni Completion {{{
-imap <C-Space> <C-x><C-o><C-p>
+"imap <C-Space> <C-x><C-o><C-p>
+" }}}
 
 " カーソルラインの切り替え {{{
 nmap \\cl :set cursorline!<CR>
+" }}}
 
 " ステータスライン用 {{{
 function! GetB()
@@ -453,9 +446,9 @@ nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
 "cabbrev grep <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Grep <C-r><C-w>' : 'grep')<CR>
 
 "ChangeLog設定{{{
-let g:changelog_username = ''
-"mapを有効にする
-runtime ftplugin/changelog.vim
+"let g:changelog_username = ''
+""mapを有効にする
+"runtime ftplugin/changelog.vim
 
 "migemo辞書
 if has('win32')
@@ -464,7 +457,7 @@ else
 endif
 
 "project.vim設定{{{
-let g:proj_flags="imstg"
+"let g:proj_flags="imstg"
 
 "viewを保存しておく,diffモード時と無名バッファは保存しない,helpとhowmのファイルも保存しない{{{
 function! ChkMkView()
@@ -1225,6 +1218,40 @@ call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 set helpfile=$VIMRUNTIME/doc/help.txt
 filetype plugin on
+" }}}
+
+" neobundle.vim {{{
+"set nocompatible
+"filetype off
+"
+"if has('vim_starting')
+"  set runtimepath+='~/.vim/bundle/neobundle.vim'
+"
+"  call neobundle#rc(expand('~/.vim/bundle'))
+"endif
+"
+"NeoBundle 'git://github.com/Shougo/echodoc.git'
+"NeoBundle 'git://github.com/Shougo/neocomplcache.git'
+"NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
+"NeoBundle 'git://github.com/Shougo/unite.vim.git'
+"NeoBundle 'git://github.com/Shougo/vimfiler.git'
+"NeoBundle 'git://github.com/Shougo/vimshell.git'
+"NeoBundle 'git://github.com/Shougo/vimproc.git'
+"NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
+"NeoBundle 'git://github.com/mattn/gist-vim.git'
+"NeoBundle 'git://github.com/Shougo/vimshell.git'
+"NeoBundle 'git://github.com/ujihisa/quickrun.git'
+"NeoBundle 'git://github.com/ujihisa/vimshell-ssh.git'
+"NeoBundle 'git://github.com/tsukkee/unite-help.git'
+"NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
+"NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
+"NeoBundle 'git://github.com/mivok/vimtodo.git'
+"NeoBundle 'git://github.com/tpope/vim-fugitive.git'
+"NeoBundle 'git://github.com/tpope/vim-surround.git'
+"NeoBundle 'git://github.com/thinca/vim-unite-history.git'
+"
+"filetype plugin on
+"filetype indent on
 " }}}
 
 " vimproc設定{{{
