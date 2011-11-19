@@ -1298,6 +1298,7 @@ nnoremap <silent> <Leader>f :<C-u>VimFiler<CR>
 "vimfilerdoubleの起動
 nnoremap <silent> <Leader>d :<C-u>VimFilerDouble<CR>
 unlet mapleader
+" }}}
 
 " vimfiler.vim {{{
 " デフォルトのエクスプローラーをvimfilerにする
@@ -1305,11 +1306,11 @@ let g:vimfiler_as_default_explorer = 1
 " 起動時からsafeモード解除
 let g:vimfiler_safe_mode_by_default = 0
 " directoryを選択したときにgcpを使用するように修正
-if has('mac')
-"  let g:unite_kind_file_copy_file_command = 'gcp -p $srcs $dest'
-"  let g:unite_kind_file_copy_directory_command = 'gcp -p -r $srcs $dest'
-"	let g:unite_kind_file_move_command = 'gmv $srcs $dest'
-endif
+"if has('mac')
+"  let g:unite_kind_file_copy_file_command = '/opt/local/bin/gcp -p $srcs $dest'
+"  let g:unite_kind_file_copy_directory_command = '/opt/local/bin/gcp -p -r $srcs $dest'
+"	let g:unite_kind_file_move_command = '/opt/local/bin/gmv $srcs $dest'
+"endif
 " vimfiler上の独自キーマッピング
 autocmd FileType vimfiler call s:vimfiler_my_settings()
 function! s:vimfiler_my_settings()
@@ -1328,7 +1329,7 @@ endfunction
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-
+" }}}
 
 set sessionoptions-=options
 "set grepprg=jvgrep
@@ -1490,8 +1491,8 @@ function! s:todo_my_settings()
   nmap <buffer> 9n oTODO ds<Space>
   iabbrev <buffer> cc [ ]
   nnoremap <buffer><silent> 99 9
-	nmap <buffer><silent> J /TODO[^:]<CR>
-	nmap <buffer><silent> K ?TODO[^:]<CR>
+	nmap <buffer><silent> J /\<TODO[^:]<CR>
+	nmap <buffer><silent> K ?\<TODO[^:]<CR>
 endfunction
 " }}}
 
@@ -1519,4 +1520,25 @@ if (has('win32') || has('win64')) && filereadable(expand('~/.vimrc.win'))
 	source ~/.vimrc.win
 endif
 " }}}
+
+" vim-altercmd {{{
+call altercmd#load()
+command!
+\ -bar -nargs=+
+\ MapAlterCommand
+\ CAlterCommand <args> | AlterCommand <cmdwin> <args>
+" }}}
+
+" restart.vim {{{
+command!
+\ -bar
+\ RestartWithSession
+\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages'
+\ | Restart
+
+MapAlterCommand res[tart] Restart
+MapAlterCommand ers[tart] Restart
+MapAlterCommand rse[tart] Restart
+" }}}
+
 

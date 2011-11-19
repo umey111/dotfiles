@@ -189,7 +189,7 @@ lazy fmaps -u='mail\.google\.com/mail' c / y j k n p o u e x s r a # [ ] ? gi gs
 "lazy fmaps -u='mail\.google\.com/mail/.*/[0-9a-f]+$' c / j,n k,p n,j p,k o u e x s r a # [ ] ? gi gs gt gd ga gc
 lazy fmaps -u='www\.google\.com/reader' -events=vkeypress j k n p m s v A r S N P X O gh ga gs gt gu u / ? J K
 "lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o : s ? + i
-lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o s ? + i
+"lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o s ? + i
 lazy fmaps -u='groups\.google\.com/.*' gl gm gs j k v p o s ? / f h a A c u p P n N K
 "fmap -modes=i -events=keydown,keypress <C-p> <Up>
 "fmap -modes=i -events=keydown,keypress <C-n> <Down>
@@ -232,6 +232,11 @@ cabbrev -javascript ro 'rosen'
 "inoremap z z
 "inoremap jj <Esc>j
 "inoremap j j
+
+" tab-history.js {{{
+nnoremap < :tabh back<CR>
+nnoremap > :tabh forward<CR>
+" }}}
 
 "javascriptでの設定読み込み
 source ~/.vimperatorrc.js
