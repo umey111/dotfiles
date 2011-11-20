@@ -102,7 +102,7 @@ else
   set   runtimepath+=$HOME/.vim/chalice/after
 endif
 "set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
-set		listchars=tab:>-,trail:_
+set		listchars=tab:>-,trail:-
 set		list
 set   keymap&			   " keymapをdefaultに設定
 set   history=3000		    " コマンド行の履歴を1000行残す
