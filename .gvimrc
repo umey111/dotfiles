@@ -363,6 +363,8 @@ if has('win32')
 endif
 if has('gui_macvim')
 	set noimdisableactivate
+  set transparency=30
+  colorscheme BlackSea
 endif
 
 if has('multi_byte_ime')

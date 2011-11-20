@@ -101,7 +101,9 @@ else
   set   runtimepath+=$HOME/.vim/chalice
   set   runtimepath+=$HOME/.vim/chalice/after
 endif
-set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
+"set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
+set		listchars=tab:>-,trail:_
+set		list
 set   keymap&			   " keymapをdefaultに設定
 set   history=3000		    " コマンド行の履歴を1000行残す
 "set nowrap     " 長い行を折り返して表示 (nowrap:折り返さない)
