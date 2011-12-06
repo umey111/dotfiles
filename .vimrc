@@ -102,7 +102,7 @@ else
   set   runtimepath+=$HOME/.vim/chalice/after
 endif
 "set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
-set		listchars=tab:>-,trail:-
+set		listchars=tab:>-,trail:_
 set		list
 set   keymap&			   " keymapをdefaultに設定
 set   history=3000		    " コマンド行の履歴を1000行残す
@@ -849,7 +849,8 @@ nnoremap <A-DOWN> :set guioptions+=m<CR>
 "挿入モード時にCtrl-Iで抜けて末尾に移動
 "inoremap <C-i> <C-o>A
 "inoremap <C-e> <Esc>A
-imap <c-e> <Esc>A
+imap <c-a> <HOME>
+imap <c-e> <END>
 
 " changelogのマッピング {{{
 "nnoremap <silent> [Space]o :NewChangelogEntry<CR>
@@ -1543,4 +1544,5 @@ MapAlterCommand ers[tart] Restart
 MapAlterCommand rse[tart] Restart
 " }}}
 
-
+" gfで開けるファイルを増やす
+autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') | setlocal path+=;/
