@@ -103,7 +103,7 @@ else
 endif
 "set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
 set		listchars=tab:>-,trail:_
-set		list
+"set		list
 set   keymap&			   " keymapをdefaultに設定
 set   history=3000		    " コマンド行の履歴を1000行残す
 "set nowrap     " 長い行を折り返して表示 (nowrap:折り返さない)
@@ -852,8 +852,7 @@ nnoremap <A-DOWN> :set guioptions+=m<CR>
 imap <c-a> <HOME>
 imap <c-e> <END>
 
-" changelogのマッピング {{{
-"nnoremap <silent> [Space]o :NewChangelogEntry<CR>
+imap <c-@> <c-[>
 
 " smartword ON-OFF {{{
 let s:ToggleSmartWordON=0
@@ -881,6 +880,7 @@ function! ToggleSmartWord()
   endif
 endfunction
 "nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
+"}}}
 
 " foldingをh,lで閉じたり開いたりするマッピング {{{
 " 行頭で h を押すと折畳を閉じる。
@@ -1082,7 +1082,6 @@ function! s:unite_my_settings()
  " c-wでパス単位で削除するように変更
  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
  imap <buffer> jj <Plug>(unite_insert_leave)
- nmap <buffer> <C-w> <Plug>(unite_delete_backward_path)
  "" c-aでカーソルを先頭に移動して絞り込みテキスト入力を開始する
  "imap <buffer> <C-a> <Plug>(unite_insert_head)
  " c-eでカーソルを行末に移動して絞り込みテキスト入力を開始する
@@ -1159,7 +1158,7 @@ augroup my_ex_mappings
 	autocmd FileType vimshell nnoremap <buffer><silent> <C-P> :<C-u>tabprevious <CR>
 	autocmd FileType vimshell nmap <buffer><silent> J <Plug>(vimshell_next_prompt)
 	autocmd FileType vimshell nmap <buffer><silent> K <Plug>(vimshell_previous_prompt)
-	" quickfix用設定(qの記録はそこまで使わないため、Qに設定) {{{2
+	" quickfix用設定(qの記録はそこまで使わないため、Qに設定) {{{
 	"autocmd FileType * nnoremap <buffer> Q q
 	"autocmd FileType unite,vimfiler,vimshell nunmap <buffer> Q
 	"autocmd FileType * nnoremap <buffer> qj  :cnext<Return>
@@ -1544,5 +1543,6 @@ MapAlterCommand ers[tart] Restart
 MapAlterCommand rse[tart] Restart
 " }}}
 
-" gfで開けるファイルを増やす
+" gfで開けるファイルを増やす {{{
 autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') | setlocal path+=;/
+" }}}

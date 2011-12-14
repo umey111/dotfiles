@@ -233,6 +233,12 @@ cabbrev -javascript ro 'rosen'
 "inoremap jj <Esc>j
 "inoremap j j
 
+" insertモード、コマンドモードでc-f,c-bの設定
+inoremap <C-f> <right>
+inoremap <C-b> <left>
+cnoremap <C-f> <right>
+cnoremap <C-b> <left>
+
 " tab-history.js {{{
 nnoremap < :tabh back<CR>
 nnoremap > :tabh forward<CR>
