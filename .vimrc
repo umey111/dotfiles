@@ -30,6 +30,11 @@ set whichwrap=b,s,[,],<,>
 set noexpandtab
 " BACKSPACEで、改行も消せる
 set backspace=indent,eol,start   
+" 現在のバッファをすべてtabで開く
+let mapleader = "\<C-w>"
+nnoremap <silent> <Leader><C-t> :<C-u>tab ball<CR>
+nnoremap <silent> <Leader>t :<C-u>tab ball<CR>
+unlet mapleader
 
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:{{{2
@@ -57,6 +62,9 @@ set title
 set scrolloff=3                  
 " マッチしているカッコを表示するための時間
 set matchtime=2
+" tabを常に表示
+set showtabline=2
+
 "---------------------------------------------------------------------------
 " ファイル操作に関する設定:{{{2
 " バックアップファイルを作成しない
@@ -73,6 +81,8 @@ else
   set   backupdir=>/tmp
 endif
 set   shellslash                   " ディレクトリの区切り文字を"/"にする
+"オプションを保存しない
+set viewoptions=folds,cursor
 
 "---------------------------------------------------------------------------
 " misc{{{2
@@ -171,6 +181,10 @@ nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
 nmap <silent> <Leader>f :<C-u>AfxOpen<CR>
 nmap <silent> <Leader><C-f> :<C-u>AfxOpen<CR>
 unlet mapleader
+" 挿入モードでも<A-Space>でシステムメニューを表示
+imap <A-Space> <ESC>:simalt ~<CR>gi
+" 現在のバッファの検索結果をvimgrep+quickfixで一覧表示
+nmap <unique> <F3> :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 
 "Spaceで行移動{{{2
 "nnoremap <silent> <Space> <C-D>
@@ -207,25 +221,6 @@ endif
 " AutoCmd memo file {{{2
 au BufNewFile,BufRead *.memo			setf memo
 au BufNewFile,BufRead *.vb			setf vbnet
-
-" デフォルトのtab表示の設定 {{{2
-set showtabline=2
-" 新しいバッファを開くときに常に新しいTABで
-"au BufAdd,BufNewFile * nested tab sball
-
-" 現在のバッファをすべてtabで開く {{{2
-let mapleader = "\<C-w>"
-nnoremap <silent> <Leader><C-t> :<C-u>tab ball<CR>
-nnoremap <silent> <Leader>t :<C-u>tab ball<CR>
-unlet mapleader
-
-" 現在のバッファの検索結果をvimgrep+quickfixで一覧表示 {{{2
-nmap <unique> <F3> :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
-
-" 挿入モードでも<A-Space>でシステムメニューを表示 {{{2
-imap <A-Space> <ESC>:simalt ~<CR>gi
-
-
 
 " ステータスライン用 {{{2
 function! GetB()
@@ -409,14 +404,6 @@ endif
 nnoremap <silent> <C-N> :<C-u>tabnext <CR>
 nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
 
-" 開いたバッファのディレクトリに移動 {{{2
-"set autochdir
-
-"" :eをしたときに自動でC-dしてリストを表示する
-"cabbrev e <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'e <C-d>' : 'e')<CR>
-" :grep を入力したら自動的にその後にカーソル下の単語を挿入する
-" fuzzyfinderとの関係で最後の<CR>を削除
-"cabbrev grep <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'Grep <C-r><C-w>' : 'grep')<CR>
 
 "ChangeLog設定{{{2
 "let g:changelog_username = ''
@@ -429,17 +416,12 @@ if has('win32')
 else
 endif
 
-"project.vim設定{{{2
-"let g:proj_flags="imstg"
-
 "viewを保存しておく,diffモード時と無名バッファは保存しない,helpとhowmのファイルも保存しない{{{2
 function! ChkMkView()
 	if &diff == 0 && empty(expand("%")) == 0 && match(expand("%:e"), "jax") == -1 && match(expand("%:p"), "howm\/.*\.howm") == -1
 		mkview
 	endif
 endfunction
-"オプションを保存しない
-set viewoptions=folds,cursor
 if has('win32')
   set viewdir=$HOME/vimfiles/view
 else
