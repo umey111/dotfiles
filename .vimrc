@@ -1,20 +1,11 @@
 "---------------------------------------------------------------------------
-" 検索の挙動に関する設定:
-
+" 検索の挙動に関する設定:{{{2
 " 検索時に大文字小文字を無視 (noignorecase:無視しない)
 set ignorecase
 " 大文字小文字の両方が含まれている場合は大文字小文字を区別
 set smartcase
-
 "---------------------------------------------------------------------------
-" 編集に関する設定:
-"
-" タブの画面上での幅
-set tabstop=2
-" タブをスペースに展開しない (expandtab:展開する)
-set noexpandtab
-" 自動的にインデントする (noautoindent:インデントしない)
-set autoindent
+" 編集に関する設定:{{{2
 " バックスペースでインデントや改行を削除できるようにする
 set backspace=indent,eol,start
 " 検索時にファイルの最後まで行ったら最初に戻る (nowrapscan:戻らない)
@@ -25,18 +16,31 @@ set showmatch
 set wildmenu
 " テキスト挿入中の自動折り返しを日本語に対応させる
 set formatoptions+=mM
+" 禁則処理 OFF
+set textwidth=0
+if has('win32') || has('win64')
+  set encoding=utf-8
+endif
+set autoindent                   " auto indent を使用
+set smartindent                  " smart indent を使用
+set cindent                      " c indent を使用
+" 左右のカーソルキーでは行を跨って移動
+set whichwrap=b,s,[,],<,>
+" TABはTABのまま
+set noexpandtab
+" BACKSPACEで、改行も消せる
+set backspace=indent,eol,start   
 
 "---------------------------------------------------------------------------
-" GUI固有ではない画面表示の設定:
-
-" 行番号を非表示 (number:表示)
-set nonumber
+" GUI固有ではない画面表示の設定:{{{2
+" 行番号を表示
+set number
 " ルーラーを表示 (noruler:非表示)
 set ruler
-" タブや改行を表示 (list:表示)
+" タブや改行を非表示 (list:表示)
 set nolist
 " どの文字でタブや改行を表示するかを設定
-"set listchars=tab:>-,extends:<,trail:-,eol:<
+set	listchars=tab:>-,trail:_,eol:$
 " 長い行を折り返して表示 (nowrap:折り返さない)
 set wrap
 " 常にステータス行を表示 (詳細は:he laststatus)
@@ -49,24 +53,13 @@ set showcmd
 set title
 " 画面を黒地に白にする (次行の先頭の " を削除すれば有効になる)
 "colorscheme evening " (Windows用gvim使用時はgvimrcを編集すること)
-
+" スクロールするときに３行余分がある？
+set scrolloff=3                  
+" マッチしているカッコを表示するための時間
+set matchtime=2
 "---------------------------------------------------------------------------
-" ファイル操作に関する設定:
-"
-" バックアップファイルを作成しない (次行の先頭の " を削除すれば有効になる)
-"set nobackup
-
-"---------------------------------------------------------------------------
-" カスタム{{{
-if has('win32') || has('win64')
-  set encoding=utf-8
-endif
-set   cmdheight=2                   " : 行は 2 行
-set   tabstop=4                    " タブの画面上での幅
-set   shiftwidth=4                 " シフト幅
-set   autoindent                   " auto indent を使用
-set   smartindent                  " smart indent を使用
-set   cindent                      " c indent を使用
+" ファイル操作に関する設定:{{{2
+" バックアップファイルを作成しない
 set nobackup                       " .bak ファイルは通常作らない
 if has('win32')
   set   directory=m:/vim/tmp             " > で、始めているとファイルと同じ所には
@@ -79,21 +72,15 @@ if has('win32')
 else
   set   backupdir=>/tmp
 endif
+set   shellslash                   " ディレクトリの区切り文字を"/"にする
+
+"---------------------------------------------------------------------------
+" misc{{{2
 set noerrorbells                   " 煩いのでベルは最小限
-set noexpandtab                   " TAB は TAB のまま
 "set   tags=tags\ C:\\Progra~1\\Micros~1\\VC98\\Include\\tags " tag ファイルを複数使う時
                                    " には "\ " としてスペースで区切る
-"set   textmode                     " CR+LF ファイルを指定
-"set   textwidth=0                  " 禁則処理 OFF
-set   whichwrap=11                 " 左右のカーソルキーでは行を跨って移動
-set   wildchar=9                   " コマンド行の補完キーを TAB<0x9> に
-set   showmatch
-set   number
-set   backspace=indent,eol,start   " BACKSPACEで、改行も消せる
-set   scrolloff=3                  " スクロールするときに３行余分がある？
 "set   grepprg=grep\ -nH            " grepに使用するプログラムを変更する
 "command! CD cd %:p:h               " CDでカレントバッファのディレクトリに移動
-set   shellslash                   " ディレクトリの区切り文字を"/"にする
 if has('win32')
   set   runtimepath+=$VIM/chalice
   set   runtimepath+=$VIM/chalice/after
@@ -101,19 +88,17 @@ else
   set   runtimepath+=$HOME/.vim/chalice
   set   runtimepath+=$HOME/.vim/chalice/after
 endif
-"set   listchars=tab:>-,trail:-,eol:$ " set list時の表示を変える
-set		listchars=tab:>-,trail:_
-"set		list
-set   keymap&			   " keymapをdefaultに設定
-set   history=3000		    " コマンド行の履歴を1000行残す
-"set nowrap     " 長い行を折り返して表示 (nowrap:折り返さない)
+set keymap&			   " keymapをdefaultに設定
+set history=3000		    " コマンド行の履歴を1000行残す
 "set sidescroll=10    " 表示していない領域にカーソルを動かそうとすると自動的にスクロールするようにする
 "runtime plugin/chalice.vim
 "let   MRU_num=19                   " 最近使ったファイルに残す数
 "let   $MRU=$HOME . '/_vimrecent'   " 最近使ったファイルの情報を＄HOME/_vimrecentに残す
-let   autodate_format = '%Y/%m/%d'
+"let   autodate_format = '%Y/%m/%d'
 				   " 最終更新日を自動的に入れるスクリプトのフォーマット定義
 
+"---------------------------------------------------------------------------
+" map設定{{{2
 " mapはすぐ後ろにコメントを書かないこと！
 " 行の移動を表示されている行で移動する(１行に書くとおかしくなるので、コメントを下に移動）
 noremap j gj
@@ -122,9 +107,9 @@ noremap gj j
 noremap k gk
 noremap gk k
 " 全選択コピー(ノーマルモード時のみ、VisualMode時はアスキーコード表示)
-nnoremap   ga   :%y<CR>
+nnoremap ga :%y<CR>
 " Yはカーソルより後ろの行をコピーするようにする
-nnoremap   Y y$
+nnoremap Y y$
 
 " Ctrl+Tabでウィンドウの切り替えを行う、Ctrl+Shift+Tabで逆の切り替え(serverlist.vimを使用)
 "nnoremap <silent> <C-Tab> :call CycleNextWindow()<CR>
@@ -164,7 +149,6 @@ else
 	xnoremap <silent> gW :let current_reg=@"<CR>ciw<C-R>=current_reg<CR><ESC>
 endif
 
-
 " xの時にクリップボードに保存しないようにする
 nnoremap x "_x
 
@@ -172,7 +156,13 @@ nnoremap x "_x
 xnoremap < <gv
 xnoremap > >gv
 
-" CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{
+" コマンドモード時にカーソル移動するのに便利
+cmap <C-a> <Home>
+cmap <C-e> <End>
+cmap <C-f> <Right>
+cmap <C-b> <Left>
+
+" CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{2
 let mapleader = "\<C-w>"
 nnoremap <silent> <Leader>d :<C-u>winpos 0 326<CR>
 nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
@@ -180,7 +170,6 @@ nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
 nmap <silent> <Leader>f :<C-u>AfxOpen<CR>
 nmap <silent> <Leader><C-f> :<C-u>AfxOpen<CR>
 unlet mapleader
-" }}}
 
 "Spaceで行移動{{{2
 "nnoremap <silent> <Space> <C-D>
@@ -232,23 +221,10 @@ unlet mapleader
 " 現在のバッファの検索結果をvimgrep+quickfixで一覧表示 {{{2
 nmap <unique> <F3> :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 
-" match time {{{2
-set matchtime=2
-
-" コマンドモード時にカーソル移動するのに便利 {{{2
-cmap <C-a> <Home>
-cmap <C-e> <End>
-cmap <C-f> <Right>
-cmap <C-b> <Left>
-
 " 挿入モードでも<A-Space>でシステムメニューを表示 {{{2
 imap <A-Space> <ESC>:simalt ~<CR>gi
 
-" Omni Completion {{{2
-"imap <C-Space> <C-x><C-o><C-p>
 
-" カーソルラインの切り替え {{{2
-" nmap \\cl :set cursorline!<CR>
 
 " ステータスライン用 {{{2
 function! GetB()
