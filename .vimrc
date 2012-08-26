@@ -248,7 +248,7 @@ imap <A-Space> <ESC>:simalt ~<CR>gi
 "imap <C-Space> <C-x><C-o><C-p>
 
 " カーソルラインの切り替え {{{2
-nmap \\cl :set cursorline!<CR>
+" nmap \\cl :set cursorline!<CR>
 
 " ステータスライン用 {{{2
 function! GetB()
@@ -1316,9 +1316,7 @@ set sessionoptions-=options
 "set grepprg=jvgrep
 
 " カーソル行をハイライト
-set cursorline!
-" smart indentを使用する
-set smartindent
+" set cursorline!
 
 " カレントウィンドウにのみ罫線を引く{{{2
 augroup cch
