@@ -4,6 +4,8 @@
 set ignorecase
 " 大文字小文字の両方が含まれている場合は大文字小文字を区別
 set smartcase
+" サーチの入るときにデフォルトで日本語にしない
+set imsearch=0
 "---------------------------------------------------------------------------
 " 編集に関する設定:{{{2
 " バックスペースでインデントや改行を削除できるようにする
@@ -35,6 +37,8 @@ let mapleader = "\<C-w>"
 nnoremap <silent> <Leader><C-t> :<C-u>tab ball<CR>
 nnoremap <silent> <Leader>t :<C-u>tab ball<CR>
 unlet mapleader
+"コマンドモード時にceditで編集モード
+set cedit=<C-O>
 
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:{{{2
@@ -64,6 +68,8 @@ set scrolloff=3
 set matchtime=2
 " tabを常に表示
 set showtabline=2
+"()を入力した際に色が変わるのをなくす
+let loaded_matchparen=1
 
 "---------------------------------------------------------------------------
 " ファイル操作に関する設定:{{{2
@@ -82,7 +88,9 @@ else
 endif
 set   shellslash                   " ディレクトリの区切り文字を"/"にする
 "オプションを保存しない
-set viewoptions=folds,cursor
+set viewoptions-=options
+"カレントディレクトリから親ディレクトリにさかのぼってtagsファイルを検索する{{{2
+set tags+=tags;
 
 "---------------------------------------------------------------------------
 " misc{{{2
@@ -172,6 +180,42 @@ cmap <C-a> <Home>
 cmap <C-e> <End>
 cmap <C-f> <Right>
 cmap <C-b> <Left>
+" like visual studio
+nmap <F4> :<C-u>copen<CR>\|:cnext<CR>
+nmap <S-F4> :<C-u>copen<CR>\|:cprev<CR>
+" 日付の挿入
+imap <F2> <C-r>=Strftime2("%Y-%m-%d")<CR>
+" <C-u>をアンドゥできるようにする。insert.jax参照
+inoremap <C-u> <C-G>u<C-u>
+inoremap <C-w> <C-G>u<C-w>
+" 最後に編集したところを選択する
+nnoremap gc `[v`]
+" Specify the last changed text as {motion}.
+onoremap gc :<C-u>normal gc<CR>
+" to show <Space> in the bottom line.
+map <Space>  [Space]
+" fallback
+noremap [Space]  <Nop>
+"検索時のハイライト消し
+nnoremap <silent> [Space]/ :<C-u>nohlsearch<CR>
+" 保存と終了のマッピング
+nnoremap <silent> [Space]w :<C-u>write<CR>
+nnoremap <silent> [Space]q :<C-u>quit<CR>
+" マーク一覧
+nnoremap <silent> [Space]m  :marks<CR>
+" レジスタ一覧
+nnoremap <silent> [Space]r  :registers<CR>
+"ALT-UPでメニュー隠す、ALT-DOWNでメニュー復活
+nnoremap <A-UP> :set guioptions-=m<CR>
+nnoremap <A-DOWN> :set guioptions+=m<CR>
+"挿入モード時にCtrl-A,Eでに移動
+imap <c-a> <HOME>
+imap <c-e> <END>
+imap <c-@> <c-[>
+
+"{}で同じインデントの行に移動する{{{2
+nnoremap { :call search ("^". matchstr (getline (line (".")+ 1), '\(\s*\)') ."\\S", 'b')<CR>^
+nnoremap } :call search ("^". matchstr (getline (line (".")), '\(\s*\)') ."\\S")<CR>^
 
 " CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{2
 let mapleader = "\<C-w>"
@@ -417,6 +461,8 @@ else
 endif
 
 "viewを保存しておく,diffモード時と無名バッファは保存しない,helpとhowmのファイルも保存しない{{{2
+"autocmd BufWritePost * if expand('%') != '' && &buftype !~ 'nofile' | mkview | endif
+"autocmd BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
 function! ChkMkView()
 	if &diff == 0 && empty(expand("%")) == 0 && match(expand("%:e"), "jax") == -1 && match(expand("%:p"), "howm\/.*\.howm") == -1
 		mkview
@@ -502,102 +548,9 @@ endfunction
 command! -nargs=? -complete=customlist,HowmEnumTags HowmTags
 nnoremap <silent> ,,s :call FullTextSearchInputTgrep()<CR>
 
-"()を入力した際に色が変わるのをなくす{{{2
-let loaded_matchparen=1
-
 "grep後に自動でQuickfixを開く{{{2
 "au QuickfixCmdPost make,grep,grepadd,vimgrep copen
 "au QuickfixCmdPost l* lopen
-
-"<F2>でNaviをコール{{{2
-"nnoremap <silent> <F2> :call Navi()<CR>
-
-"カレントディレクトリから親ディレクトリにさかのぼってtagsファイルを検索する{{{2
-set tags+=tags;
-
-"sessionを読み込む {{{2
-"nnoremap  <F11> :wa<Bar>exe "mksession! " . v:this_session<CR>:so $VIM/sessions/<C-D>
-"sessionのオプション
-"set sessionoptions-=curdir
-"set sessionoptions+=sesdir
-"set sessionoptions+=resize
-
-"{}で同じインデントの行に移動する{{{2
-nnoremap { :call search ("^". matchstr (getline (line (".")+ 1), '\(\s*\)') ."\\S", 'b')<CR>^
-nnoremap } :call search ("^". matchstr (getline (line (".")), '\(\s*\)') ."\\S")<CR>^
-
-"NERD_commenter {{{2
-"/**/を/* */にする
-"let NERDSpaceDelims = 1
-"未対応のファイルがあった場合の警告を消す
-"let NERDShutUp = 1
-
-"autocomplpop設定 {{{2
-"補完時に大文字小文字を区別しない
-"let g:AutoComplPop_IgnoreCaseOption = 1
-"起動時にautocomplpopを有効にしない
-"let g:AutoComplPop_NotEnableAtStartup = 1
-"function! ToggleAutoComplPop()
-  "if !exists('s:AutoComplPoping')
-    "let s:AutoComplPoping=0
-  "endif
-  "if s:AutoComplPoping==1
-    "AutoComplPopEnable
-    "let s:AutoComplPoping=0
-  "else
-    "AutoComplPopDisable
-    "let s:AutoComplPoping=1
-  "endif
-"endfunction
-"<C-k>kで有効、<C-k>dで無効
-"let g:mapleader = "\<C-k>"
-" nnoremap <silent> <Leader>k :AutoComplPopEnable<CR>
-" nnoremap <silent> <Leader><C-k> :AutoComplPopEnable<CR>
-" nnoremap <silent> <Leader><C-d> :AutoComplPopDisable<CR>
-" nnoremap <silent> <Leader>d :AutoComplPopDisable<CR>
-"nnoremap <silent> <Leader>k :call ToggleAutoComplPop()<CR>
-"nnoremap <silent> <Leader><C-k> :call ToggleAutoComplPop()<CR>
-"unlet g:mapleader
-
-" Autocompletion using the TAB key {{{2
-" This function determines, wether we are on the start of the line text (then tab indents) or
-" if we want to try autocompletion
-"function! InsertTabWrapper()
-"        let col = col('.') - 1
-"        if !col || getline('.')[col - 1] !~ '\k'
-"                return "\<TAB>"
-"        else
-"                if pumvisible()
-"                        return "\<C-N>"
-"                else
-"                        return "\<C-N>\<C-P>"
-"                end
-"        endif
-"endfunction
-" Remap the tab key to select action with InsertTabWrapper
-"inoremap <tab> <c-r>=InsertTabWrapper()<cr>
-" Autocompletion using the TAB key
-
-" サーチの入るときにデフォルトで日本語にしない {{{2
-set imsearch=0
-
-" like visual studio{{{2
-nmap <F4> :<C-u>copen<CR>\|:cnext<CR>
-" like visual studio
-nmap <S-F4> :<C-u>copen<CR>\|:cprev<CR>
-"}}}
-
-" AutoClose初期表示OFF {{{2
-"let g:autoclose_on=0
-
-" バッファから検索{{{2
-"nmap <unique> G/ :silent exec ':bufdo vimgrepadd /' . getreg('/') . '/j %'<CR>\|:silent cwin<CR>
-
-"コマンドモード時にceditで編集モード{{{2
-set cedit=<C-O>
-
-"日付の挿入{{{2
-imap <F2> <C-r>=Strftime2("%Y-%m-%d")<CR>
 
 "diffの設定{{{2
 "F7とF8で前後の変更箇所へ移動
@@ -726,10 +679,6 @@ endif
 "syntax match Mark /\%'a.../ containedin=ALL
 "highlight def link Mark Todo
 
-" <C-u>をアンドゥできるようにする。insert.jax参照{{{2
-inoremap <C-u> <C-G>u<C-u>
-inoremap <C-w> <C-G>u<C-w>
-
 "smartchrの設定{{{2
 "autocmd FileType php inoremap <buffer> <expr> = smartchr#one_of('=', ' = ', ' == ', ' === ','=')
 "autocmd FileType php inoremap <buffer> <expr> ! smartchr#one_of('!', ' != ', ' !== ', '!')
@@ -744,60 +693,15 @@ inoremap <C-w> <C-G>u<C-w>
 "inoremap <expr> *  smartchr#one_of(' * ', '*', ' *= ')
 "inoremap <expr> ,  smartchr#one_of(', ', ',', ', ')
 
-" 最後に編集したところを選択する{{{2
-nnoremap gc `[v`]
-" Specify the last changed text as {motion}.
-onoremap gc :<C-u>normal gc<CR>
-
-" 分割したときの移動を楽にする（最後に_が着くと、現在の画面が広くなる）{{{2
-" nnoremap <C-j> <C-W>j<C-w>_
-" nnoremap <C-k> <C-W>k<C-w>_
-" nnoremap <C-h> <C-w>h<C-w>_
-" nnoremap <C-l> <C-w>l<C-w>_
-
-""split時の移動{{{2
-"nnoremap sh <C-w>h
-"nnoremap sj <C-w>j
-"nnoremap sk <C-w>k
-"nnoremap sl <C-w>l
-""split時の位置入れ替え
-"nnoremap sH <C-w>H
-"nnoremap sJ <C-w>J
-"nnoremap sK <C-w>K
-"nnoremap sL <C-w>L
-
-" to show <Space> in the bottom line.{{{2
-map <Space>  [Space]
-
-" fallback
-noremap [Space]  <Nop>
-
-"検索時のハイライト消し
-nnoremap <silent> [Space]/ :<C-u>nohlsearch<CR>
-
-" 保存と終了のマッピング
-nnoremap <silent> [Space]w :<C-u>write<CR>
-nnoremap <silent> [Space]q :<C-u>quit<CR>
-
-" マーク一覧
-nnoremap <silent> [Space]m  :marks<CR>
-" レジスタ一覧
-nnoremap <silent> [Space]r  :registers<CR>
-
-"ALT-UPでメニュー隠す、ALT-DOWNでメニュー復活{{{2
-nnoremap <A-UP> :set guioptions-=m<CR>
-nnoremap <A-DOWN> :set guioptions+=m<CR>
-
-"ノーマルモードでエンターキーで改行挿入{{{2
-"nnoremap <CR> o<ESC>
-
-"挿入モード時にCtrl-Iで抜けて末尾に移動{{{2
-"inoremap <C-i> <C-o>A
-"inoremap <C-e> <Esc>A
-imap <c-a> <HOME>
-imap <c-e> <END>
-
-imap <c-@> <c-[>
+" foldingをh,lで閉じたり開いたりするマッピング {{{2
+" 行頭で h を押すと折畳を閉じる。
+nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
+" 折畳上で l を押すと折畳を開く。
+nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo0' : 'l'
+" 行頭で h を押すと選択範囲に含まれる折畳を閉じる。
+xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
+" 折畳上で l を押すと選択範囲に含まれる折畳を開く。
+xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 
 " smartword ON-OFF {{{2
 let s:ToggleSmartWordON=0
@@ -825,40 +729,6 @@ function! ToggleSmartWord()
   endif
 endfunction
 "nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
-
-" foldingをh,lで閉じたり開いたりするマッピング {{{2
-" 行頭で h を押すと折畳を閉じる。
-nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
-" 折畳上で l を押すと折畳を開く。
-nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo0' : 'l'
-" 行頭で h を押すと選択範囲に含まれる折畳を閉じる。
-xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
-" 折畳上で l を押すと選択範囲に含まれる折畳を開く。
-xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
-
-
-"Command-line windowの設定{{{2
-"nnoremap <sid>(command-line-enter) q:
-"xnoremap <sid>(command-line-enter) q:
-"nnoremap <sid>(command-line-norange) q:<C-u>
-"
-"nmap :  <sid>(command-line-enter)
-"xmap :  <sid>(command-line-enter)
-"
-"autocmd MyAutoCmd CmdwinEnter * call s:init_cmdwin()
-"function! s:init_cmdwin()
-"  nnoremap <buffer> q :<C-u>quit<CR>
-"  nnoremap <buffer> <TAB> :<C-u>quit<CR>
-"  inoremap <buffer><expr><CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-"  inoremap <buffer><expr><C-h> pumvisible() ? "\<C-y>\<C-h>" : "\<C-h>"
-"  inoremap <buffer><expr><BS> pumvisible() ? "\<C-y>\<C-h>" : "\<C-h>"
-"
-"  " Completion.
-"  inoremap <buffer><expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"
-"  startinsert!
-"endfunction
-"
 
 
 "neocomplecache.vim {{{2
