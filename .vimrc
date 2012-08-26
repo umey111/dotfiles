@@ -96,7 +96,8 @@ set history=3000		    " コマンド行の履歴を1000行残す
 "let   $MRU=$HOME . '/_vimrecent'   " 最近使ったファイルの情報を＄HOME/_vimrecentに残す
 "let   autodate_format = '%Y/%m/%d'
 				   " 最終更新日を自動的に入れるスクリプトのフォーマット定義
-
+set sessionoptions-=options
+"set grepprg=jvgrep
 "---------------------------------------------------------------------------
 " map設定{{{2
 " mapはすぐ後ろにコメントを書かないこと！
@@ -1287,12 +1288,6 @@ let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
-" misc{{{2
-set sessionoptions-=options
-"set grepprg=jvgrep
-
-" カーソル行をハイライト
-" set cursorline!
 
 " カレントウィンドウにのみ罫線を引く{{{2
 augroup cch
