@@ -24,3 +24,5 @@ export PATH=$GOBIN:$PATH
 # export DYLD_FALLBACK_LIBRARY_PATH=/usr/lib
 # export DYLD_LIBRARY_PATH="/opt/local/lib:/Applications/MAMP/Library/lib:$DYLD_LIBRARY_PATH"
 # export PATH=$PATH:/opt/local/bin
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

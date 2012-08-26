@@ -185,7 +185,7 @@ set messages=500
 " feedSomeKeys_3.js
 command! -nargs=+ lazy autocmd VimperatorEnter .* <args>
 "command! -nargs=+ lazy autocmd VimperatorEnter .* &lt;args>
-lazy fmaps -u='mail\.google\.com/mail' c / y j k n p o u e x s r a # [ ] ? gi gs gt gd ga gc + *a *n *r *u *s *t <C-v> . ` ~
+lazy fmaps -u='mail\.google\.com/mail' c / y j k n p o u e x s r a # [ ] ? gi gs gt gd ga gc gk gl + *a *n *r *u *s *t <C-v> . ` ~
 "lazy fmaps -u='mail\.google\.com/mail/.*/[0-9a-f]+$' c / j,n k,p n,j p,k o u e x s r a # [ ] ? gi gs gt gd ga gc
 lazy fmaps -u='www\.google\.com/reader' -events=vkeypress j k n p m s v A r S N P X O gh ga gs gt gu u / ? J K
 "lazy fmaps -u='www\.google\.co\.jp/.*' j k v p o : s ? + i
@@ -243,6 +243,9 @@ cnoremap <C-b> <left>
 nnoremap < :tabh back<CR>
 nnoremap > :tabh forward<CR>
 " }}}
+
+" undo保持数
+set! browser.sessionstore.max_tabs_undo=30
 
 "javascriptでの設定読み込み
 source ~/.vimperatorrc.js
