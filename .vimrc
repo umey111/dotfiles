@@ -442,8 +442,8 @@ elseif has('gui_macvim')
 	nnoremap <silent> <D-8> :<C-u>tabnext 8<CR>
 	nnoremap <silent> <D-9> :<C-u>tablast<CR>
 	nnoremap <silent> <D-0> :<C-u>tablast<CR>
-	nnoremap gl :macaction selectNextWindow:<CR>
-	nnoremap gh :macaction selectPreviousWindow:<CR>
+" 	nnoremap gl :macaction selectNextWindow:<CR>
+" 	nnoremap gh :macaction selectPreviousWindow:<CR>
 endif
 nnoremap <silent> <C-N> :<C-u>tabnext <CR>
 nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
@@ -845,8 +845,17 @@ nnoremap <silent> <Leader>/ :<C-u>Unite -buffer-name=history/search history/sear
 " unite-help
 nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help -start-insert help<CR>
 " unite-alignta
-nnoremap <silent> <Leader>A :<C-u>Unite -buffer-name=alignta -start-insert alignta<CR>
-xnoremap <silent> <Leader>A :Unite -buffer-name=alignta -start-insert alignta<CR>
+let g:unite_source_alignta_preset_arguments = [
+      \ ["Align at '='", '=>\='],
+      \ ["Align at ':'", '01 :'],
+      \ ["Align at '|'", '|' ],
+      \ ["Align at ')'", '0 )' ],
+      \ ["Align at ']'", '0 ]' ],
+      \ ["Align at '}'", '}' ],
+      \]
+nnoremap <silent> <Leader>A :<C-u>Unite -buffer-name=alignta -start-insert alignta:options<CR>
+xnoremap <silent> <Leader>A :<C-u>Unite -buffer-name=alignta -start-insert alignta:arguments<CR>
+xnoremap <silent> A :<C-u>Unite -buffer-name=alignta -start-insert alignta:arguments<CR>
 " unite-fire_rec project mode 
 "nnoremap <silent> <Leader>r :<C-u>call <SID>unite_project("-buffer-name=files","-input=!assets")<CR>
 "nnoremap <silent> <Leader>r :<C-u>call <SID>unite_project("-buffer-name=files","-input=".expand('%:e'))<CR>
@@ -1426,4 +1435,25 @@ nmap "" <Plug>(caw:I:toggle)
 vmap "" <Plug>(caw:I:toggle)
 nmap // <Plug>(caw:I:toggle)
 vmap // <Plug>(caw:I:toggle)
+
+" vimundo {{{2
+" http://vim-users.jp/2010/07/hack162/
+if has('persistent_undo')
+  set undodir=~/.vimundo
+  augroup vimrc-undofile
+    autocmd!
+    autocmd BufReadPre ~/* setlocal undofile
+  augroup END
+endif
+
+" thinca/poslist.vim {{{2
+nmap <C-o> <Plug>(poslist-prev-line)
+nmap <C-i> <Plug>(poslist-next-line)
+
+" last two digit move {{{2
+" ujihisa/config/_vimrc
+" not it's not only two-digit
+command! -count=1 -nargs=0 GoToTheLine silent execute getpos('.')[1][:-len(v:count)-1] . v:count
+nnoremap <silent> gl :GoToTheLine<Cr>
+
 
