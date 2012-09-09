@@ -1,5 +1,5 @@
 "---------------------------------------------------------------------------
-" 検索の挙動に関する設定:{{{2
+" 検索の挙動に関する設定:{{{1
 " 検索時に大文字小文字を無視 (noignorecase:無視しない)
 set ignorecase
 " 大文字小文字の両方が含まれている場合は大文字小文字を区別
@@ -7,7 +7,7 @@ set smartcase
 " サーチの入るときにデフォルトで日本語にしない
 set imsearch=0
 "---------------------------------------------------------------------------
-" 編集に関する設定:{{{2
+" 編集に関する設定:{{{1
 " バックスペースでインデントや改行を削除できるようにする
 set backspace=indent,eol,start
 " 検索時にファイルの最後まで行ったら最初に戻る (nowrapscan:戻らない)
@@ -41,7 +41,7 @@ unlet mapleader
 set cedit=<C-O>
 
 "---------------------------------------------------------------------------
-" GUI固有ではない画面表示の設定:{{{2
+" GUI固有ではない画面表示の設定:{{{1
 " 行番号を表示
 set number
 " ルーラーを表示 (noruler:非表示)
@@ -72,7 +72,7 @@ set showtabline=2
 let loaded_matchparen=1
 
 "---------------------------------------------------------------------------
-" ファイル操作に関する設定:{{{2
+" ファイル操作に関する設定:{{{1
 " バックアップファイルを作成しない
 set nobackup                       " .bak ファイルは通常作らない
 if has('win32')
@@ -89,11 +89,11 @@ endif
 set   shellslash                   " ディレクトリの区切り文字を"/"にする
 "オプションを保存しない
 set viewoptions-=options
-"カレントディレクトリから親ディレクトリにさかのぼってtagsファイルを検索する{{{2
+"カレントディレクトリから親ディレクトリにさかのぼってtagsファイルを検索する{{{1
 set tags+=tags;
 
 "---------------------------------------------------------------------------
-" misc{{{2
+" misc{{{1
 set noerrorbells                   " 煩いのでベルは最小限
 "set   tags=tags\ C:\\Progra~1\\Micros~1\\VC98\\Include\\tags " tag ファイルを複数使う時
                                    " には "\ " としてスペースで区切る
@@ -117,7 +117,7 @@ set history=3000		    " コマンド行の履歴を1000行残す
 set sessionoptions-=options
 "set grepprg=jvgrep
 "---------------------------------------------------------------------------
-" map設定{{{2
+" map設定{{{1
 " mapはすぐ後ろにコメントを書かないこと！
 " 行の移動を表示されている行で移動する(１行に書くとおかしくなるので、コメントを下に移動）
 noremap j gj
@@ -213,11 +213,11 @@ imap <c-a> <HOME>
 imap <c-e> <END>
 imap <c-@> <c-[>
 
-"{}で同じインデントの行に移動する{{{2
+"{}で同じインデントの行に移動する{{{1
 nnoremap { :call search ("^". matchstr (getline (line (".")+ 1), '\(\s*\)') ."\\S", 'b')<CR>^
 nnoremap } :call search ("^". matchstr (getline (line (".")), '\(\s*\)') ."\\S")<CR>^
 
-" CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{2
+" CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{1
 let mapleader = "\<C-w>"
 nnoremap <silent> <Leader>d :<C-u>winpos 0 326<CR>
 nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
@@ -230,11 +230,11 @@ imap <A-Space> <ESC>:simalt ~<CR>gi
 " 現在のバッファの検索結果をvimgrep+quickfixで一覧表示
 nmap <unique> <F3> :exec ':vimgrep /' . getreg('/') . '/j %\|cwin'<CR>
 
-"Spaceで行移動{{{2
+"Spaceで行移動{{{1
 "nnoremap <silent> <Space> <C-D>
 "nnoremap <silent> <S-Space> <C-U>
 
-" grep.vim用設定 {{{2
+" grep.vim用設定 {{{1
 if has('win32')
   let Grep_Path = 'D:\gnuwin32\bin\grep.exe'
   let FGrep_Path = 'D:\gnuwin32\bin\grep.exe -F'
@@ -249,7 +249,7 @@ if has('win32')
   let g:fever_guifont = 'ＭＳ_ゴシック:h9:cSHIFTJIS'
 endif
 
-" chalice用設定(オートプレビュー機能を使用しない) {{{2
+" chalice用設定(オートプレビュー機能を使用しない) {{{1
 let g:chalice_preview=0
 " chalice用設定(オートプレビュー時にオートクローズする)
 let g:chalice_previewflags='autoclose'
@@ -262,11 +262,11 @@ else
   let g:chalice_cachedir = '$HOME/.vim/2chcache'
 endif
 
-" AutoCmd memo file {{{2
+" AutoCmd memo file {{{1
 au BufNewFile,BufRead *.memo			setf memo
 au BufNewFile,BufRead *.vb			setf vbnet
 
-" ステータスライン用 {{{2
+" ステータスライン用 {{{1
 function! GetB()
   let c = matchstr(getline('.'), '.', col('.') - 1)
   let c = iconv(c, &enc, &fenc)
@@ -327,10 +327,10 @@ set statusline+=[%{GetB()}] " カーソル行の文字コードを表示
 set statusline+=%P    " ファイル内の何％の位置にあるか
 
 
-"CTRL-Aで8進数の計算をさせない {{{2
+"CTRL-Aで8進数の計算をさせない {{{1
 set nrformats-=octal
 
-" FuzzyFinderFile  {{{2
+" FuzzyFinderFile  {{{1
 "let g:mapleader = "\\"
 "nnoremap <silent> <Leader>f :FuzzyFinderFile<CR>
 "nnoremap <silent> <Leader>f :<C-u>FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
@@ -395,7 +395,7 @@ set nrformats-=octal
       "\
       "\ }
 
-" Tabラベルの設定 {{{2
+" Tabラベルの設定 {{{1
 "function GuiTabLabel()
 "  let label = ''
 "  let bufnrlist = tabpagebuflist(v:lnum)
@@ -419,7 +419,7 @@ set nrformats-=octal
 "endfunction
 "set guitablabel=%N\ %{GuiTabLabel()}
 
-" tabページの移動 {{{2
+" tabページの移動 {{{1
 if has('win32') || has('win64')
 	nnoremap <silent> <A-1> :<C-u>tabfirst<CR>
 	nnoremap <silent> <A-2> :<C-u>tabnext 2<CR>
@@ -449,35 +449,56 @@ nnoremap <silent> <C-N> :<C-u>tabnext <CR>
 nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
 
 
-"ChangeLog設定{{{2
+"ChangeLog設定{{{1
 "let g:changelog_username = ''
 ""mapを有効にする
 "runtime ftplugin/changelog.vim
 
-"migemo辞書{{{2
+"migemo辞書{{{1
 if has('win32')
   set migemodict=m:/migemodict/org/dict/migemo-dict
 else
 endif
 
-"viewを保存しておく,diffモード時と無名バッファは保存しない,helpとhowmのファイルも保存しない{{{2
+"viewを保存しておく,diffモード時と無名バッファは保存しない,helpとhowmのファイルも保存しない{{{1
 "autocmd BufWritePost * if expand('%') != '' && &buftype !~ 'nofile' | mkview | endif
 "autocmd BufRead * if expand('%') != '' && &buftype !~ 'nofile' | silent loadview | endif
-function! ChkMkView()
-	if &diff == 0 && empty(expand("%")) == 0 && match(expand("%:e"), "jax") == -1 && match(expand("%:p"), "howm\/.*\.howm") == -1
-		mkview
-	endif
-endfunction
+"function! ChkMkView()
+"	if &diff == 0 && empty(expand("%")) == 0 && match(expand("%:e"), "jax") == -1 && match(expand("%:p"), "howm\/.*\.howm") == -1
+"		mkview
+"	endif
+"endfunction
+"if has('win32')
+"  set viewdir=$HOME/vimfiles/view
+"else
+"  set viewdir=$HOME/.vim/view
+"endif
+"
+"au BufWinLeave *.* call ChkMkView()
+"au BufWinEnter *.* silent loadview
+
+" view保存処理{{{1
+" https://gist.github.com/3666285 by thinca
 if has('win32')
   set viewdir=$HOME/vimfiles/view
 else
   set viewdir=$HOME/.vim/view
 endif
+augroup vimrc-view
+  autocmd!
+  autocmd BufLeave * if expand('%') !=# '' && &buftype ==# ''
+  \ | mkview
+  \ | endif
+  autocmd BufReadPost * if !exists('b:view_loaded') &&
+  \ expand('%') !=# '' && &buftype ==# ''
+  \ | silent! loadview
+  \ | let b:view_loaded = 1
+  \ | endif
+  autocmd VimLeave * call map(split(glob(&viewdir . '/*'), "\n"),
+  \ 'delete(v:val)')
+augroup END
 
-au BufWinLeave *.* call ChkMkView()
-au BufWinEnter *.* silent loadview
-
-"howm設定 {{{2
+"howm設定 {{{1
 if has('win32')
   set runtimepath+=$VIM/howm_vim
 else
@@ -522,7 +543,7 @@ let g:howm_actionlock_list = [
     \ },
     \ { 'list': ['[o]', '[x]'] }
   \ ]
-"検索文字列の入力時にタグを補完する{{{2
+"検索文字列の入力時にタグを補完する{{{1
 function! FullTextSearchInputTgrep()
     let l:searchWord = input('howm Full text search(tgrep): ', '', 'customlist,HowmEnumTags')
     if l:searchWord == '' | return | endif
@@ -548,11 +569,11 @@ endfunction
 command! -nargs=? -complete=customlist,HowmEnumTags HowmTags
 nnoremap <silent> ,,s :call FullTextSearchInputTgrep()<CR>
 
-"grep後に自動でQuickfixを開く{{{2
+"grep後に自動でQuickfixを開く{{{1
 "au QuickfixCmdPost make,grep,grepadd,vimgrep copen
 "au QuickfixCmdPost l* lopen
 
-"diffの設定{{{2
+"diffの設定{{{1
 "F7とF8で前後の変更箇所へ移動
 nnoremap <F7> [c
 nnoremap <F8> ]c
@@ -590,7 +611,7 @@ function! Prevdiff()
 	endif
 endfunction
 
-"refe.vimの設定{{{2
+"refe.vimの設定{{{1
 "augroup BufferAu
 "    autocmd! BufferAu
 "    "初期化
@@ -599,7 +620,7 @@ endfunction
 "    au BufEnter *.rb nnoremap <silent> K :Refe <cword><CR>
 "augroup END
 
-"Rubyの設定{{{2
+"Rubyの設定{{{1
 "preview interpreter's output(Tip #1244)
 function! Ruby_eval_vsplit() range
     if &filetype == "ruby"
@@ -632,7 +653,7 @@ nmap <silent> <M-S-F10> :ccl<CR>
 "<C-F10>でRubyスクリプトを保存後コマンドプロンプトから実行
 nmap <silent> <C-F10> :w<CR>:!ruby %<CR>
 
-" 「:OccurMigemo ame」で「雨」とか「飴」とか「AME」とか探せる。{{{2
+" 「:OccurMigemo ame」で「雨」とか「飴」とか「AME」とか探せる。{{{1
 command -complete=tag -nargs=1 OccurMigemo call s:OccurMigemo() | cwindow
 command -complete=tag -nargs=1 MultiOccurMigemo call s:MultiOccurMigemo() | cwindow
 " 「:GrepMigemo ame *.txt」みたいに。
@@ -650,7 +671,7 @@ function s:GrepMigemo(pat, ...)
   execute 'vimgrep /' . migemo(a:pat) . '/ ' . join(a:000, ' ')
 endfunction
 
-" 検索時に結果が中央に来るようにする{{{2
+" 検索時に結果が中央に来るようにする{{{1
 "nmap n nzz
 "nmap N Nzz
 "nmap * *zz
@@ -664,7 +685,7 @@ endfunction
 "nmap sh <C-w>h<C-w>_
 "nmap sl <C-w>l<C-w>_
 
-"term color {{{2
+"term color {{{1
 if $TERM =~ "xterm-256color"
   colorscheme desert256
   " omini..
@@ -679,7 +700,7 @@ endif
 "syntax match Mark /\%'a.../ containedin=ALL
 "highlight def link Mark Todo
 
-"smartchrの設定{{{2
+"smartchrの設定{{{1
 "autocmd FileType php inoremap <buffer> <expr> = smartchr#one_of('=', ' = ', ' == ', ' === ','=')
 "autocmd FileType php inoremap <buffer> <expr> ! smartchr#one_of('!', ' != ', ' !== ', '!')
 "前に<buffer>付けるとバッファonly
@@ -693,7 +714,7 @@ endif
 "inoremap <expr> *  smartchr#one_of(' * ', '*', ' *= ')
 "inoremap <expr> ,  smartchr#one_of(', ', ',', ', ')
 
-" foldingをh,lで閉じたり開いたりするマッピング {{{2
+" foldingをh,lで閉じたり開いたりするマッピング {{{1
 " 行頭で h を押すと折畳を閉じる。
 nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
 " 折畳上で l を押すと折畳を開く。
@@ -703,7 +724,7 @@ xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
 " 折畳上で l を押すと選択範囲に含まれる折畳を開く。
 xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 
-" smartword ON-OFF {{{2
+" smartword ON-OFF {{{1
 let s:ToggleSmartWordON=0
 function! ToggleSmartWord()
   if s:ToggleSmartWordON==1
@@ -731,7 +752,7 @@ endfunction
 "nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
 
 
-"neocomplecache.vim {{{2
+"neocomplecache.vim {{{1
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
@@ -809,7 +830,7 @@ inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcach
 " snippetsのフォルダ設定
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
-" unite.vim {{{2
+" unite.vim {{{1
 "入力モード開始する
 let g:unite_enable_start_insert = 1
 "let g:mapleader = "\\"
@@ -817,7 +838,7 @@ let mapleader = "0"
 "バッファ一覧
 nnoremap <silent> <Leader>b :<C-u>Unite buffer<CR>
 "ファイル一覧
-nnoremap <silent> <Leader>f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> <Leader>f :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
 " レジスタ一覧
 "nnoremap <silent> <Leader>r :<C-u>Unite -buffer-name=register register<CR>
 " grep一覧
@@ -827,7 +848,7 @@ nnoremap <silent> <Leader>h :<C-u>Unite -buffer-name=files file_mru<CR>
 " 常用セット
 nnoremap <silent> <Leader>u :<C-u>Unite -buffer-name=files buffer file_mru<CR>
 " 全部乗せ
-nnoremap <silent> <Leader>a :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
+nnoremap <silent> <Leader>a :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file file/new<CR>
 " outline
 nnoremap <silent> <Leader>o :<C-u>Unite -buffer-name=outline outline -no-start-insert -auto-preview<CR>
 nnoremap <silent> <F2> :<C-u>Unite -buffer-name=outline outline -no-start-insert -auto-preview<CR>
@@ -967,7 +988,7 @@ endfunction
 "call unite#set_buffer_name_option('default', 'smartcase', 1)
 "let g:unite_source_file_mru_ignore_pattern='\.git'
 
-" 特殊なmappingの設定{{{2
+" 特殊なmappingの設定{{{1
 augroup my_ex_mappings
 	
 	autocmd! my_ex_mappings
@@ -978,7 +999,7 @@ augroup my_ex_mappings
 	autocmd FileType vimshell nnoremap <buffer><silent> <C-P> :<C-u>tabprevious <CR>
 	autocmd FileType vimshell nmap <buffer><silent> J <Plug>(vimshell_next_prompt)
 	autocmd FileType vimshell nmap <buffer><silent> K <Plug>(vimshell_previous_prompt)
-	" quickfix用設定(qの記録はそこまで使わないため、Qに設定) {{{2
+	" quickfix用設定(qの記録はそこまで使わないため、Qに設定) {{{1
 	"autocmd FileType * nnoremap <buffer> Q q
 	"autocmd FileType unite,vimfiler,vimshell nunmap <buffer> Q
 	"autocmd FileType * nnoremap <buffer> qj  :cnext<Return>
@@ -1004,7 +1025,7 @@ augroup my_ex_mappings
 augroup END
 
 
-" vim-surround"{{{2
+" vim-surround"{{{1
 let g:surround_no_mappings = 1
 autocmd my_ex_mappings FileType * call s:define_surround_keymappings()
 
@@ -1031,14 +1052,14 @@ function! s:define_surround_keymappings()
 endfunction
 "autocmd my_ex_mappings FileType unite nunmap <buffer> ds
 
-" pathogen設定{{{2
+" pathogen設定{{{1
 filetype off
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 set helpfile=$VIMRUNTIME/doc/help.txt
 filetype plugin on
 
-" neobundle.vim {{{2
+" neobundle.vim {{{1
 "set nocompatible
 "filetype off
 "
@@ -1071,19 +1092,19 @@ filetype plugin on
 "filetype plugin on
 "filetype indent on
 
-" vimproc設定{{{2
-let g:vimproc_dll_path = $HOME . '/.vim/autoload/proc.so'
+" vimproc設定{{{1
+" let g:vimproc_dll_path = $HOME . '/.vim/autoload/proc.so'
 
-" tab設定{{{2
+" tab設定{{{1
 set softtabstop=2
 set tabstop=2
 set shiftwidth=2
 
-" encoding設定{{{2
+" encoding設定{{{1
 "set encoding=utf-8
 "set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
 
-" diff設定{{{2
+" diff設定{{{1
 "set diffopt-=filler
 "set diffopt+=vertical
 "半角スペースの数が比較している行で違っていてもそれを無視してdiff実行
@@ -1100,7 +1121,7 @@ nnoremap gl gt
 "セパレートウィンドウを切り替えをリマップ
 "nnoremap <C-w> <C-w><C-w>
 
-" vimshell.vim {{{2
+" vimshell.vim {{{1
 let g:vimshell_user_prompt = 'getcwd()'
 let g:vimshell_max_command_history = 3000
 
@@ -1120,7 +1141,7 @@ nnoremap <silent> <Leader>f :<C-u>VimFiler<CR>
 nnoremap <silent> <Leader>d :<C-u>VimFilerDouble<CR>
 unlet mapleader
 
-" vimfiler.vim {{{2
+" vimfiler.vim {{{1
 " デフォルトのエクスプローラーをvimfilerにする
 let g:vimfiler_as_default_explorer = 1
 " 起動時からsafeモード解除
@@ -1144,20 +1165,20 @@ function! s:vimfiler_my_settings()
 	endif
 endfunction
 
-" open-browser.vim {{{2
+" open-browser.vim {{{1
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 
 
-" カレントウィンドウにのみ罫線を引く{{{2
+" カレントウィンドウにのみ罫線を引く{{{1
 augroup cch
 	autocmd! cch
 	autocmd WinLeave * set nocursorline
 	autocmd WinEnter,BufRead * set cursorline
 augroup END
 
-" ターミナル上のみのつもりgui版以外のがいいかも？{{{2
+" ターミナル上のみのつもりgui版以外のがいいかも？{{{1
 "if !has('win32') && !has('win64') && !has('gui_macvim')
 if $TERM =~ "xterm"
 
@@ -1176,7 +1197,7 @@ if $TERM =~ "xterm"
 endif
 
 
-" for Fugitive.vim {{{2
+" for Fugitive.vim {{{1
 let mapleader = "\\"
 nnoremap <Leader>gd :<C-u>Gdiff<Enter>
 nnoremap <Leader>gs :<C-u>Gstatus<Enter>
@@ -1194,14 +1215,14 @@ function! s:gitcommit_my_settings()
   nmap <buffer><silent> ? :<C-u>Unite -no-start-insert -buffer-name=fugitive/mapping fugitive/mapping<CR>
 endfunction
 
-" c-gを2c-gに{{{2
+" c-gを2c-gに{{{1
 nnoremap <C-g> <Esc>2<C-g>
-" aをa!に{{{2
+" aをa!に{{{1
 "cnoremap a<CR> a!<CR>
 
-" foldmethod=markerに{{{2
+" foldmethod=markerに{{{1
 set foldmethod=marker
-" :mes で出てくるメッセージは適当にクリップボードにコピーする。 in Vim - Humanity{{{2
+" :mes で出てくるメッセージは適当にクリップボードにコピーする。 in Vim - Humanity{{{1
 " http://d.hatena.ne.jp/tyru/20110624/copy_messages_to_clipboard
 command! MessCopy call s:messcopy()
 if has('win32') || has('win64') || has('gui_macvim')
@@ -1222,7 +1243,7 @@ else
 	endfunction
 endif
  
-" F12でset nonuをtoggleする{{{2
+" F12でset nonuをtoggleする{{{1
 let g:setnumber = 1
 function! ToggleSetNumber()
   if g:setnumber==1
@@ -1235,17 +1256,17 @@ function! ToggleSetNumber()
 endfunction
 nnoremap <silent> <F12> :call ToggleSetNumber()<CR>
 
-" dt(とかをd(とかでできる{{{2
+" dt(とかをd(とかでできる{{{1
 onoremap ( t(
 onoremap ) t)
 onoremap [ t[
 onoremap ] t]
 
-" ZoomWin設定{{{2
+" ZoomWin設定{{{1
 nmap <unique> <c-w>o  <Plug>ZoomWin
 nmap <unique> <c-w><c-o>  <Plug>ZoomWin
 
-" submode.vim{{{2
+" submode.vim{{{1
 " たとえば、ウィンドウのサイズ変更（<C-w>+とか）を
 " 繰り返し入力するのは大変！
 " call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
@@ -1256,7 +1277,7 @@ nmap <unique> <c-w><c-o>  <Plug>ZoomWin
 " call submode#map('winsize', 'n', '', '<', '<C-w><')
 " call submode#map('winsize', 'n', '', '+', '<C-w>+')
 " call submode#map('winsize', 'n', '', '-', '<C-w>-')
-" textmanip{{{2
+" textmanip{{{1
 " call submode#enter_with('textmanip', 'v', 'r', '<C-t>h', '<Plug>(textmanip-move-left)')
 " call submode#enter_with('textmanip', 'v', 'r', '<C-t>j', '<Plug>(textmanip-move-down)')
 " call submode#enter_with('textmanip', 'v', 'r', '<C-t>k', '<Plug>(textmanip-move-up)')
@@ -1266,14 +1287,14 @@ nmap <unique> <c-w><c-o>  <Plug>ZoomWin
 " call submode#map('textmanip', 'v', 'r', 'k', '<Plug>(textmanip-move-up)')
 " call submode#map('textmanip', 'v', 'r', 'l', '<Plug>(textmanip-move-right)')
 
-" Ex modeの履歴を遡るのもちょっと楽できる{{{2
+" Ex modeの履歴を遡るのもちょっと楽できる{{{1
 " yokohama.vim#2 by tsukkee
 cnoremap <C-p> <Up>
 cnoremap <Up> <C-p>
 cnoremap <C-n> <Down>
 cnoremap <Down> <C-n>
 
-" vimtodo.vim{{{2
+" vimtodo.vim{{{1
 let g:todo_checkbox_states = [
         \[" ", "X", "-"]]
 " vimtodo.vim上でのキーマッピング
@@ -1298,7 +1319,7 @@ function! s:todo_my_settings()
 	nmap <buffer><silent> K ?\<TODO[^:]<CR>
 endfunction
 
-" 現在のファイルとカレントディレクトリにある同名のファイルをdiffする {{{2
+" 現在のファイルとカレントディレクトリにある同名のファイルをdiffする {{{1
 command! CurrentDiff call s:currentdiff()
 command! CurrentVDiff call s:currentvdiff()
 function! s:currentdiff()
@@ -1310,7 +1331,7 @@ function! s:currentvdiff()
 	execute ":vertical diffsplit ".expand("%:t")
 endfunction
 
-" 環境依存設定{{{2
+" 環境依存設定{{{1
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
@@ -1321,14 +1342,14 @@ if (has('win32') || has('win64')) && filereadable(expand('~/.vimrc.win'))
 	source ~/.vimrc.win
 endif
 
-" vim-altercmd {{{2
+" vim-altercmd {{{1
 call altercmd#load()
 command!
 \ -bar -nargs=+
 \ MapAlterCommand
 \ CAlterCommand <args> | AlterCommand <cmdwin> <args>
 
-" restart.vim {{{2
+" restart.vim {{{1
 command!
 \ -bar
 \ RestartWithSession
@@ -1339,10 +1360,10 @@ MapAlterCommand res[tart] Restart
 MapAlterCommand ers[tart] Restart
 MapAlterCommand rse[tart] Restart
 
-" gfで開けるファイルを増やす {{{2
+" gfで開けるファイルを増やす {{{1
 autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') | setlocal path+=;/
 
-" autoescダメだった {{{2
+" autoescダメだった {{{1
 "let g:autoesc_pos = [0, 0, 0, 0]
 "let g:autoesc_nomovecount = 0
 "autocmd CursorHoldI <buffer> call s:autoesc()
@@ -1366,7 +1387,7 @@ autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') 
 "  let g:autoesc_pos = current_pos
 "endfunction
 
-" 閉じタグの補完{{{2
+" 閉じタグの補完{{{1
 augroup MyCloseTag
   autocmd!
   autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
@@ -1374,17 +1395,17 @@ augroup MyCloseTag
   autocmd Filetype php inoremap <buffer> __ __('')<Left><Left>
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
-" カーソルキーで行末／行頭の移動可能に設定{{{2
+" カーソルキーで行末／行頭の移動可能に設定{{{1
 "set whichwrap=b,s,[,],<,>
 "nnoremap h <Left>
 "nnoremap l <Right>
 
-" 縦に連番を入力する{{{2
+" 縦に連番を入力する{{{1
 nnoremap <silent> co :ContinuousNumber <C-a><CR>
 vnoremap <silent> co :ContinuousNumber <C-a><CR>
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 
-" phpmapping {{{2
+" phpmapping {{{1
 "augroup PhpMapping
 "    au!
 "    autocmd FileType php inoremap <buffer> , ,<Space>
@@ -1398,7 +1419,7 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
 "  call setline('.', line)
 "endfunction
 
-" 'cursorline' を必要な時にだけ有効にする - 永遠に未完成 {{{2
+" 'cursorline' を必要な時にだけ有効にする - 永遠に未完成 {{{1
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
 augroup vimrc-auto-cursorline
   autocmd!
@@ -1430,13 +1451,13 @@ augroup vimrc-auto-cursorline
   endfunction
 augroup END
 
-" caw.vim {{{2
+" caw.vim {{{1
 nmap "" <Plug>(caw:I:toggle)
 vmap "" <Plug>(caw:I:toggle)
 nmap // <Plug>(caw:I:toggle)
 vmap // <Plug>(caw:I:toggle)
 
-" vimundo {{{2
+" vimundo {{{1
 " http://vim-users.jp/2010/07/hack162/
 if has('persistent_undo')
   set undodir=~/.vimundo
@@ -1446,14 +1467,20 @@ if has('persistent_undo')
   augroup END
 endif
 
-" thinca/poslist.vim {{{2
+" thinca/poslist.vim {{{1
 nmap <C-o> <Plug>(poslist-prev-line)
 nmap <C-i> <Plug>(poslist-next-line)
 
-" last two digit move {{{2
+" last two digit move {{{1
 " ujihisa/config/_vimrc
 " not it's not only two-digit
 command! -count=1 -nargs=0 GoToTheLine silent execute getpos('.')[1][:-len(v:count)-1] . v:count
 nnoremap <silent> gl :GoToTheLine<Cr>
 
+" Jump to the last editing position.{{{1
+" https://gist.github.com/3666285 by thinca
+  autocmd BufReadPost
+  \ * if line("'\"") && line("'\"") <= line('$')
+  \ | execute 'normal! g`"'
+  \ | endif
 
