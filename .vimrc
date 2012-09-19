@@ -89,6 +89,26 @@ endif
 set   shellslash                   " ディレクトリの区切り文字を"/"にする
 "オプションを保存しない
 set viewoptions-=options
+""""""""""""""""""""""""""""""{{{1
+"Kaoriya版に添付されているプラグインの無効化
+"問題があるものもあるので一律に無効化します。
+"ファイルを参照(コメント部分で gf を実行)した上で、必要なプラグインは
+"let plugin_..._disableの設定行をコメント化(削除)して有効にして下さい。
+""""""""""""""""""""""""""""""
+"$VIM/plugins/kaoriya/autodate.vim
+let plugin_autodate_disable  = 1
+"$VIM/plugins/kaoriya/cmdex.vim
+let plugin_cmdex_disable     = 1
+"$VIM/plugins/kaoriya/dicwin.vim
+let plugin_dicwin_disable    = 1
+"$VIMRUNTIME/plugin/format.vim
+let plugin_format_disable    = 1
+"$VIM/plugins/kaoriya/hz_ja.vim
+let plugin_hz_ja_disable     = 1
+"$VIM/plugins/kaoriya/scrnmode.vim
+let plugin_scrnmode_disable  = 1
+"$VIM/plugins/kaoriya/verifyenc.vim
+let plugin_verifyenc_disable = 1
 "カレントディレクトリから親ディレクトリにさかのぼってtagsファイルを検索する{{{1
 set tags+=tags;
 
@@ -680,10 +700,16 @@ endfunction
 "nmap g# g#zz
 "nmap g/ g/zz
 
-"nmap sj <C-W>j<C-w>_
-"nmap sk <C-W>k<C-w>_
-"nmap sh <C-w>h<C-w>_
-"nmap sl <C-w>l<C-w>_
+" nmap sj <C-W>j<C-w>_
+" nmap sk <C-W>k<C-w>_
+" nmap sh <C-w>h<C-w>_
+" nmap sl <C-w>l<C-w>_
+nmap sj <C-W>j
+nmap sk <C-W>k
+nmap sh <C-w>h
+nmap sl <C-w>l
+" 標準のsをssに割り当て
+nnoremap <silent> ss s
 
 "term color {{{1
 if $TERM =~ "xterm-256color"
@@ -750,6 +776,18 @@ function! ToggleSmartWord()
   endif
 endfunction
 "nnoremap <silent> [Space]j :call ToggleSmartWord()<CR>
+nmap w <Plug>(smartword-w)
+nmap b <Plug>(smartword-b)
+nmap e <Plug>(smartword-e)
+nmap ge <Plug>(smartword-ge)
+vmap w <Plug>(smartword-w)
+vmap b <Plug>(smartword-b)
+vmap e <Plug>(smartword-e)
+vmap ge <Plug>(smartword-ge)
+omap <Leader>w <Plug>(smartword-w)
+omap <Leader>b <Plug>(smartword-b)
+omap <Leader>e <Plug>(smartword-e)
+omap <Leader>ge <Plug>(smartword-ge)
 
 
 "neocomplecache.vim {{{1
@@ -827,8 +865,26 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
 "vimのオムニ補完をneocomplecacheに置き換える
 inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
+"標準で用意されているスニペットを無効にする。初期化前に設定する
+let g:neocomplcache_snippets_disable_runtime_snippets = 1
 " snippetsのフォルダ設定
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
+
+" thinca's vimrc for reading-vimrc #10 (2012/09/08) — Gist
+" https://gist.github.com/3666285
+" function! s:tab_wrapper()
+"   if neocomplcache#sources#snippets_complete#expandable()
+"     return "\<Plug>(neocomplcache_snippets_jump)"
+"   elseif pumvisible()
+"     return "\<C-y>"
+"   elseif (!exists('b:smart_expandtab') || b:smart_expandtab) &&
+"   \ !&l:expandtab && !search('^\s*\%#', 'nc')
+"     return repeat(' ', &l:tabstop - (virtcol('.') - 1) % &l:tabstop)
+"   endif
+"   return "\<Tab>"
+" endfunction
+" "inoremap <silent> <Plug>(adjust-indent) <ESC>==I
+" imap <silent> <expr> <Tab> <SID>tab_wrapper()
 
 " unite.vim {{{1
 "入力モード開始する
@@ -857,12 +913,17 @@ if has('win32') || has('win64')
 else
 	nnoremap <silent> <Leader>e :<C-u>Unite -buffer-name=files locate<CR>
 endif
+" tab
+nnoremap <silent> <Leader>t :<C-u>Unite -buffer-name=tab tab<CR>
 " history/command
 nnoremap <silent> <Leader>: :<C-u>Unite -buffer-name=history/command history/command<CR>
 "nnoremap <silent> q: :<C-u>Unite -no-start-insert -buffer-name=history/command history/command<CR>
 " history/search
 nnoremap <silent> <Leader>/ :<C-u>Unite -buffer-name=history/search history/search<CR>
 "nnoremap <silent> q/ :<C-u>Unite -buffer-name=history/search history/search<CR>
+" history/yank
+let g:unite_source_history_yank_enable = 1
+nnoremap <silent> <Leader>y :<C-u>Unite -buffer-name=history/yank history/yank<CR>
 " unite-help
 nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help -start-insert help<CR>
 " unite-alignta
@@ -1479,8 +1540,28 @@ nnoremap <silent> gl :GoToTheLine<Cr>
 
 " Jump to the last editing position.{{{1
 " https://gist.github.com/3666285 by thinca
-  autocmd BufReadPost
-  \ * if line("'\"") && line("'\"") <= line('$')
-  \ | execute 'normal! g`"'
-  \ | endif
+autocmd BufReadPost
+\ * if line("'\"") && line("'\"") <= line('$')
+\ | execute 'normal! g`"'
+\ | endif
+
+" Open junk file."{{{1
+let mapleader = "0"
+"バッファ一覧
+nnoremap <silent> <Leader>9 :<C-u>JunkFile<CR>
+command! -nargs=0 JunkFile call s:open_junk_file()
+function! s:open_junk_file()
+  let l:junk_dir = $HOME . '/.vim_junk'. strftime('/%Y/%m')
+  if !isdirectory(l:junk_dir)
+    call mkdir(l:junk_dir, 'p')
+  endif
+
+  let l:filename = input('Junk Code: ', l:junk_dir.strftime('/%Y-%m-%d-%H%M%S.'))
+  if l:filename != ''
+    execute 'tabnew ' . l:filename
+  endif
+endfunction
+unlet mapleader
+
+
 
