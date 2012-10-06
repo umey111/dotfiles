@@ -98,7 +98,7 @@ set viewoptions-=options
 "$VIM/plugins/kaoriya/autodate.vim
 let plugin_autodate_disable  = 1
 "$VIM/plugins/kaoriya/cmdex.vim
-let plugin_cmdex_disable     = 1
+" let plugin_cmdex_disable     = 1
 "$VIM/plugins/kaoriya/dicwin.vim
 let plugin_dicwin_disable    = 1
 "$VIMRUNTIME/plugin/format.vim
@@ -136,15 +136,26 @@ set history=3000		    " コマンド行の履歴を1000行残す
 				   " 最終更新日を自動的に入れるスクリプトのフォーマット定義
 set sessionoptions-=options
 "set grepprg=jvgrep
+" VimでESCの反応を素早くする，再び ~timeoutlenとttimeoutlen~ | 日々の記録
+" http://gajumaru.ddo.jp/wordpress/?p=1101
+set timeout timeoutlen=1000 ttimeoutlen=75
 "---------------------------------------------------------------------------
 " map設定{{{1
 " mapはすぐ後ろにコメントを書かないこと！
 " 行の移動を表示されている行で移動する(１行に書くとおかしくなるので、コメントを下に移動）
-noremap j gj
-noremap gj j
+nnoremap j gj
+onoremap j gj
+xnoremap j gj
+nnoremap gj j
+onoremap gj j
+xnoremap gj j
 " 行の移動を表示されている行で移動する(１行に書くとおかしくなるので、コメントを下に移動）
-noremap k gk
-noremap gk k
+nnoremap k gk
+onoremap k gk
+xnoremap k gk
+nnoremap gk k
+onoremap gk k
+xnoremap gk k
 " 全選択コピー(ノーマルモード時のみ、VisualMode時はアスキーコード表示)
 nnoremap ga :%y<CR>
 " Yはカーソルより後ろの行をコピーするようにする
@@ -200,6 +211,8 @@ cmap <C-a> <Home>
 cmap <C-e> <End>
 cmap <C-f> <Right>
 cmap <C-b> <Left>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
 " like visual studio
 nmap <F4> :<C-u>copen<CR>\|:cnext<CR>
 nmap <S-F4> :<C-u>copen<CR>\|:cprev<CR>
@@ -791,6 +804,8 @@ omap <Leader>ge <Plug>(smartword-ge)
 
 
 "neocomplecache.vim {{{1
+"標準で用意されているスニペットを無効にする。初期化前に設定する
+let g:neocomplcache_snippets_disable_runtime_snippets = 1
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
@@ -865,8 +880,6 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
 "vimのオムニ補完をneocomplecacheに置き換える
 inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
-"標準で用意されているスニペットを無効にする。初期化前に設定する
-let g:neocomplcache_snippets_disable_runtime_snippets = 1
 " snippetsのフォルダ設定
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
@@ -892,7 +905,7 @@ let g:unite_enable_start_insert = 1
 "let g:mapleader = "\\"
 let mapleader = "0"
 "バッファ一覧
-nnoremap <silent> <Leader>b :<C-u>Unite buffer<CR>
+nnoremap <silent> <Leader>b :<C-u>Unite tab buffer<CR>
 "ファイル一覧
 nnoremap <silent> <Leader>f :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
 " レジスタ一覧
@@ -1048,7 +1061,6 @@ endfunction
 "call unite#set_buffer_name_option('default', 'ignorecase', 1)
 "call unite#set_buffer_name_option('default', 'smartcase', 1)
 "let g:unite_source_file_mru_ignore_pattern='\.git'
-
 " 特殊なmappingの設定{{{1
 augroup my_ex_mappings
 	
@@ -1174,10 +1186,12 @@ set diffopt+=iwhite
 "タブ移動リマップ
 nnoremap t gt
 nnoremap T gT
-nnoremap <Right> gt
 nnoremap <Left> gT
+nnoremap <Right> gt
 nnoremap gh gT
 nnoremap gl gt
+nnoremap H gT
+nnoremap L gt
 
 "セパレートウィンドウを切り替えをリマップ
 "nnoremap <C-w> <C-w><C-w>
@@ -1452,7 +1466,7 @@ autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') 
 augroup MyCloseTag
   autocmd!
   autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
-  "autocmd Filetype php inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype php inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype php inoremap <buffer> __ __('')<Left><Left>
   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
@@ -1563,5 +1577,6 @@ function! s:open_junk_file()
 endfunction
 unlet mapleader
 
-
+" sonictemplate-vim{{{1
+let g:sonictemplate_vim_template_dir = '$HOME/.vim/template'
 
