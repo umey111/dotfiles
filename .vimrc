@@ -1,3 +1,52 @@
+" vim-plug install
+" $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+" $   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+"vim-plug{{{1
+if has('vim_starting')
+  set rtp+=~/.vim/plugged/vim-plug
+  if !isdirectory(expand('~/.vim/plugged/vim-plug'))
+    echo 'install vim-plug...'
+    call system('mkdir -p ~/.vim/plugged/vim-plug')
+    call system('git clone https://github.com/junegunn/vim-plug.git ~/.vim/plugged/vim-plug/autoload')
+  end
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'junegunn/vim-plug',
+			\ {'dir': '~/.vim/plugged/vim-plug/autoload'}
+Plug 'LeafCage/yankround.vim'
+Plug 'kana/vim-smartword'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-gf-user'
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+Plug 'Shougo/vimproc.vim', { 'dir': '~/.vim/plugged/vimproc.vim', 'do': 'make' }
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-surround'
+Plug 'rking/ag.vim'
+Plug 'Shougo/vimshell.vim'
+Plug 'Shougo/vimfiler.vim'
+Plug 'Shougo/neossh.vim'
+Plug 'Shougo/vinarise.vim'
+Plug 'h1mesuke/vim-alignta'
+Plug 'thinca/vim-quickrun'
+Plug 'tyru/caw.vim'
+Plug 'vim-scripts/DrawIt'
+" unite関連
+Plug 'Shougo/unite.vim'
+Plug 'tsukkee/unite-help'
+Plug 'Shougo/unite-outline'
+Plug 'Shougo/neomru.vim'
+Plug 'Sixeight/unite-grep'
+Plug 'basyura/unite-rails'
+Plug 'thinca/vim-unite-history'
+Plug 'tsukkee/unite-tag'
+Plug 'choplin/unite-vim_hacks'
+Plug 'sgur/unite-qf'
+Plug 'glidenote/memolist.vim'
+call plug#end()
+
 "---------------------------------------------------------------------------
 " 検索の挙動に関する設定:{{{1
 " 検索時に大文字小文字を無視 (noignorecase:無視しない)
@@ -8,16 +57,16 @@ set smartcase
 set imsearch=0
 "---------------------------------------------------------------------------
 " 編集に関する設定:{{{1
-" バックスペースでインデントや改行を削除できるようにする
-set backspace=indent,eol,start
 " 検索時にファイルの最後まで行ったら最初に戻る (nowrapscan:戻らない)
 set wrapscan
 " 括弧入力時に対応する括弧を表示 (noshowmatch:表示しない)
 set showmatch
 " コマンドライン補完するときに強化されたものを使う(参照 :help wildmenu)
-set wildmenu
+set wildmenu wildmode=list:full
+" textwidthで自動改行しない
+set formatoptions=q
 " テキスト挿入中の自動折り返しを日本語に対応させる
-set formatoptions+=mM
+set formatoptions+=M
 " 禁則処理 OFF
 set textwidth=0
 if has('win32') || has('win64')
@@ -39,7 +88,10 @@ nnoremap <silent> <Leader>t :<C-u>tab ball<CR>
 unlet mapleader
 "コマンドモード時にceditで編集モード
 set cedit=<C-O>
-
+" 括弧両方入力時自動で中に移動
+inoremap () ()<Left>
+inoremap {} {}<Left>
+inoremap [] []<Left>
 "---------------------------------------------------------------------------
 " GUI固有ではない画面表示の設定:{{{1
 " 行番号を表示
@@ -49,7 +101,7 @@ set ruler
 " タブや改行を非表示 (list:表示)
 set nolist
 " どの文字でタブや改行を表示するかを設定
-set	listchars=tab:>-,trail:_,eol:$
+set listchars=tab:>-,trail:_,eol:$
 " 長い行を折り返して表示 (nowrap:折り返さない)
 set wrap
 " 常にステータス行を表示 (詳細は:he laststatus)
@@ -75,13 +127,12 @@ let loaded_matchparen=1
 " ファイル操作に関する設定:{{{1
 " バックアップファイルを作成しない
 set nobackup                       " .bak ファイルは通常作らない
-if has('win32')
-  set   directory=m:/vim/tmp             " > で、始めているとファイルと同じ所には
-                                   " .swp を作らずに指定した所 (d:\tmp) に作る
+if has('win32') || has('win64')
+  set   directory=c:/temp             " > で、始めているとファイルと同じ所には
 else
   set   directory=/tmp             " > で、始めているとファイルと同じ所には
 endif
-if has('win32')
+if has('win32') || has('win64')
   set   backupdir=>%TMP%             " .bakファイルを作るときは、指定したところに作る。
 else
   set   backupdir=>/tmp
@@ -170,10 +221,10 @@ nnoremap Y y$
 "inoremap <silent> <C-S-Tab> <C-O>:call CyclePrevWindow()<CR>
 " Tabでバッファの切り替えを行う
 " Ctrl+Tabでバッファの切り替えを行う
-nnoremap <silent> <C-Tab> :bn<CR>
-nnoremap <silent> <C-S-Tab> :bp<CR>
-vnoremap <silent> <C-Tab> :bn<CR>
-vnoremap <silent> <C-S-Tab> :bp<CR>
+"nnoremap <silent> <C-Tab> :bn<CR>
+"nnoremap <silent> <C-S-Tab> :bp<CR>
+"vnoremap <silent> <C-Tab> :bn<CR>
+"vnoremap <silent> <C-S-Tab> :bp<CR>
 
 " 直前にヤンクした文字列を現在の選択範囲に上書きする
 xnoremap <silent> p <Esc>:let current_reg = @*<CR>gvs<C-R>=current_reg<CR><Esc>
@@ -246,18 +297,13 @@ imap <c-a> <HOME>
 imap <c-e> <END>
 imap <c-@> <c-[>
 
+" visualモードで選択して*後に:%s//{置換文字列}/gで選択した文字列を置換できる
+vnoremap * "zy:let @/ = @z<CR>
+
 "{}で同じインデントの行に移動する{{{1
 nnoremap { :call search ("^". matchstr (getline (line (".")+ 1), '\(\s*\)') ."\\S", 'b')<CR>^
 nnoremap } :call search ("^". matchstr (getline (line (".")), '\(\s*\)') ."\\S")<CR>^
 
-" CTRL-W,CTRL-Dでpositionを開始位置に戻す {{{1
-let mapleader = "\<C-w>"
-nnoremap <silent> <Leader>d :<C-u>winpos 0 326<CR>
-nnoremap <silent> <Leader><C-d> :<C-u>winpos 0 326<CR>
-" CTRL-W,CTRL-Fで現在のファイルをあふで開く
-nmap <silent> <Leader>f :<C-u>AfxOpen<CR>
-nmap <silent> <Leader><C-f> :<C-u>AfxOpen<CR>
-unlet mapleader
 " 挿入モードでも<A-Space>でシステムメニューを表示
 imap <A-Space> <ESC>:simalt ~<CR>gi
 " 現在のバッファの検索結果をvimgrep+quickfixで一覧表示
@@ -275,11 +321,6 @@ if has('win32')
   let Grep_Find_Path = 'D:\gnuwin32\bin\find.exe'
   let Grep_Xargs_Path = 'D:\gnuwin32\bin\xargs.exe'
   let Grep_Shell_Quote_Char = '"'
-endif
-
-" scrnmode.vim用設定(画面いっぱいにvimを広げたとき(:Fever)のFontサイズの指定) {{{
-if has('win32')
-  let g:fever_guifont = 'ＭＳ_ゴシック:h9:cSHIFTJIS'
 endif
 
 " chalice用設定(オートプレビュー機能を使用しない) {{{1
@@ -347,7 +388,7 @@ set statusline+=\     " 空白スペース
 "  set statusline+=%t    " ファイル名のみ
 "endif
 set statusline+=%=    " 左寄せ項目と右寄せ項目の区切り
-set statusline+=%{fugitive#statusline()}  " Gitのブランチ名を表示
+set statusline+=%{exists('g:loaded_fugitive')?fugitive#statusline():''}  " Gitのブランチ名を表示
 set statusline+=\ \   " 空白スペース2個
 set statusline+=[%{GetB()}] " カーソル行の文字コードを表示
 "set statusline+=%1l   " 何行目にカーソルがあるか
@@ -362,71 +403,6 @@ set statusline+=%P    " ファイル内の何％の位置にあるか
 
 "CTRL-Aで8進数の計算をさせない {{{1
 set nrformats-=octal
-
-" FuzzyFinderFile  {{{1
-"let g:mapleader = "\\"
-"nnoremap <silent> <Leader>f :FuzzyFinderFile<CR>
-"nnoremap <silent> <Leader>f :<C-u>FuzzyFinderFile <C-r>=expand('%:~:.')[:-1-len(expand('%:~:.:t'))]<CR><CR>
-"nnoremap <silent> <Leader>b :<C-u>FuzzyFinderBuffer<CR>
-"nnoremap <silent> <Leader>h :<C-u>FuzzyFinderMruFile<CR>
-"nnoremap <silent> <Leader>c :<C-u>FuzzyFinderMruCmd<CR>
-"unlet g:mapleader
-
-"let g:FuzzyFinderOptions = { 'Base':{}, 'Buffer':{}, 'File':{}, 'MruFile':{}, 'Bookmark':{}, 'Dir':{}, 'Tag':{}, 'TaggedFile':{}}
-"大文字小文字を無視する
-"let g:FuzzyFinderOptions.Base.ignore_case = 1
-"短縮形の追加
-"let g:FuzzyFinderOptions.File.abbrev_map = {
-"  \ '\C^VP' : [
-"  \     '$VIMRUNTIME/plugin/',
-"  \     '~/.vim/plugin/',
-"  \     '$VIM/.vim/plugin/',
-"  \   ],
-"  \ '\C^VC' : [
-"  \     '$VIMRUNTIME/colors/',
-"  \     '~/.vim/colors/',
-"  \     '$VIM/.vim/colors/',
-"  \   ],
-"  \ }
-"直前のバッファでオープン
-"let g:FuzzyFinderOptions.Base.key_open = '<C-CR>'
-"Tabでオープン
-"let g:FuzzyFinderOptions.Base.key_open_tab = '<CR>'
-"let g:FuzzyFinderOptions.File.excluded_path = '\v\~$|2chcache|\.tmp$|\.howm$|\.exe$|\.dll$|\=$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)'
-"let g:FuzzyFinderOptions.MruFile.max_item = 500
-"let g:FuzzyFinderOptions.MruFile.excluded_path = '\v\~$|2chcache|\.tmp$|\.howm$|\.exe$|\.dll$|\=$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)'
-
-"let  g:FuzzyFinderOptions = {
-      "\   'ignore_case' : 1,
-      "\
-      "\   'file' : {
-      "\     'abbrev_map' : {
-      "\       '\C^VP' : [
-      "\         '$VIMRUNTIME/plugin/',
-      "\         '~/.vim/plugin/',
-      "\         '$VIM/.vim/plugin/',
-      "\         '$VIM/vimfiles/plugin/',
-      "\       ],
-      "\       '\C^VC' : [
-      "\         '$VIMRUNTIME/colors/',
-      "\         '~/.vim/colors/',
-      "\         '$VIM/.vim/colors/',
-      "\         '$VIM/vimfiles/colors/',
-      "\       ],
-      "\     },
-      "\       'excludedPath' : '\v\~$|\.exe$|\.dll$|\=$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)',
-      "\   },
-      "\
-      "\   'mru_file' : {
-      "\       'max_item' : 500,
-      "\       'excludedPath' : '\v\~$|\.exe$|\.dll$|\=$|\.bak$|\.swp$|((^|[/\\])\.[/\\]$)',
-      "\   },
-      "\
-      "\   'mru_cmd' : {
-      "\       'max_item' : 500,
-      "\   },
-      "\
-      "\ }
 
 " Tabラベルの設定 {{{1
 "function GuiTabLabel()
@@ -478,8 +454,18 @@ elseif has('gui_macvim')
 " 	nnoremap gl :macaction selectNextWindow:<CR>
 " 	nnoremap gh :macaction selectPreviousWindow:<CR>
 endif
-nnoremap <silent> <C-N> :<C-u>tabnext <CR>
-nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
+" nnoremap <silent> <C-N> :<C-u>tabnext <CR>
+" nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
+"タブ移動リマップ
+"nnoremap t gt
+"nnoremap T gT
+nnoremap <Left> gT
+nnoremap <Right> gt
+nnoremap gh gT
+nnoremap gl gt
+nnoremap H gT
+nnoremap L gt
+
 
 
 "ChangeLog設定{{{1
@@ -488,8 +474,8 @@ nnoremap <silent> <C-P> :<C-u>tabprevious <CR>
 "runtime ftplugin/changelog.vim
 
 "migemo辞書{{{1
-if has('win32')
-  set migemodict=m:/migemodict/org/dict/migemo-dict
+if has('win32') || has('win64')
+  set migemodict=$HOME/tool/migemodict/org/dict/utf-8/migemo-dict
 else
 endif
 
@@ -512,7 +498,7 @@ endif
 
 " view保存処理{{{1
 " https://gist.github.com/3666285 by thinca
-if has('win32')
+if has('win32') || has('win64')
   set viewdir=$HOME/vimfiles/view
 else
   set viewdir=$HOME/.vim/view
@@ -531,76 +517,6 @@ augroup vimrc-view
   \ 'delete(v:val)')
 augroup END
 
-"howm設定 {{{1
-if has('win32')
-  set runtimepath+=$VIM/howm_vim
-else
-  set runtimepath+=$HOME/.vim/howm_vim
-endif
-
-let g:howm_fileencoding='utf-8'
-let g:howm_dir='~/howm'
-"let g:howm_findprg='\"D:/Program\ Files/gnuwin32/bin/find.exe\"'
-"let g:howm_grepprg='\"D:/Program\ Files/gnuwin32/bin/grep.exe\"'
-"let g:howm_findprg='\"D:/gnuwin32/bin/find.exe\"'
-"let g:howm_grepprg='\"D:/gnuwin32/bin/grep.exe\"'
-"動いたらすぐプレビュー
-"let g:howm_instantpreview = 1
-"autopureviewを無効に
-"let g:howm_autopreview = 0
-"autoshowpreview
-let g:howm_auto_show_preview = 1
-function! HowmActionlockSnoopy(str, head)
-  echo 'よく見るとスヌーピーには似ていない'
-endfunction
-let g:howm_actionlock_list = [
-    \ {
-      \ 'list': [
-        \ '[ ]',
-        \ '[          :  0%]',
-        \ '[+         : 10%]',
-        \ '[++        : 20%]',
-        \ '[+++       : 30%]',
-        \ '[++++      : 40%]',
-        \ '[+++++     : 50%]',
-        \ '[++++++    : 60%]',
-        \ '[+++++++   : 70%]',
-        \ '[++++++++  : 80%]',
-        \ '[+++++++++ : 90%]',
-        \ '[++++++++++:100%]'
-      \ ],
-    \ },
-    \ {
-      \ 'func': function('HowmActionlockSnoopy'),
-      \ 'pat': 'でつ'
-    \ },
-    \ { 'list': ['[o]', '[x]'] }
-  \ ]
-"検索文字列の入力時にタグを補完する{{{1
-function! FullTextSearchInputTgrep()
-    let l:searchWord = input('howm Full text search(tgrep): ', '', 'customlist,HowmEnumTags')
-    if l:searchWord == '' | return | endif
-    let l:searchWord = escape(l:searchWord, '\')
-    let l:searchWord = substitute(l:searchWord, l:searchWord , '^' .g:howm_title_pattern. ' .*\\V&', '')
-    call HowmCommand('FullTextSearchInputVgrepA', l:searchWord)
-endfunction
-function! HowmEnumTags(...)
-  let l:complist = []
-  if a:1 =~ '^[\d32-\d126]\{2,}$'
-    let l:searchWord = migemo(a:1)
-  else
-    let l:searchWord = a:1
-  endif
-  for l:item in readfile(expand(g:howm_keywordfile))
-    " 中間部分一致してほしいならば、'^'をはずす
-    if l:item =~ '^'.l:searchWord
-      call insert(l:complist, l:item)
-    endif
-  endfor
-  return l:complist
-endfunction
-command! -nargs=? -complete=customlist,HowmEnumTags HowmTags
-nnoremap <silent> ,,s :call FullTextSearchInputTgrep()<CR>
 
 "grep後に自動でQuickfixを開く{{{1
 "au QuickfixCmdPost make,grep,grepadd,vimgrep copen
@@ -726,11 +642,12 @@ nnoremap <silent> ss s
 
 "term color {{{1
 if $TERM =~ "xterm-256color"
-  colorscheme desert256
+"   colorscheme desert256
+"colorscheme desert256
   " omini..
-  highlight Pmenu ctermbg=8
-  highlight PmenuSel ctermbg=12
-  highlight PmenuSbar ctermbg=0
+"  highlight Pmenu ctermbg=8
+"  highlight PmenuSel ctermbg=12
+"  highlight PmenuSbar ctermbg=0
 endif
 
 "highlight ZenkakuSpace ctermbg=6
@@ -803,115 +720,27 @@ omap <Leader>e <Plug>(smartword-e)
 omap <Leader>ge <Plug>(smartword-ge)
 
 
-"neocomplecache.vim {{{1
-"標準で用意されているスニペットを無効にする。初期化前に設定する
-let g:neocomplcache_snippets_disable_runtime_snippets = 1
-" Use neocomplcache.
-let g:neocomplcache_enable_at_startup = 1
-" Use smartcase.
-let g:neocomplcache_enable_smart_case = 1
-" Use camel case completion.
-let g:neocomplcache_enable_camel_case_completion = 1
-" Use underbar completion.
-let g:neocomplcache_enable_underbar_completion = 1
-" Set minimum syntax keyword length.
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-
-" Define dictionary.
-let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : ''
-        \ }
-	
-" Define keyword.
-if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
-endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-"imap <C-k>     <Plug>(neocomplcache_start_unite_complete)
-"smap <C-k>     <Plug>(neocomplcache_start_unite_complete)
-inoremap <expr><C-g>     neocomplcache#undo_completion()
-inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-" SuperTab like snippets behavior.
-"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-"inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplcache_enable_auto_select = 1
-"let g:neocomplcache_disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-"inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType php setlocal omnifunc=phpcomplete#CompletePHP
-
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-	let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-
-"vimのfile補完をneocomplecacheに置き換える
-inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
-"vimのオムニ補完をneocomplecacheに置き換える
-inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplcache#manual_omni_complete()
-" snippetsのフォルダ設定
-let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
-
-" thinca's vimrc for reading-vimrc #10 (2012/09/08) — Gist
-" https://gist.github.com/3666285
-" function! s:tab_wrapper()
-"   if neocomplcache#sources#snippets_complete#expandable()
-"     return "\<Plug>(neocomplcache_snippets_jump)"
-"   elseif pumvisible()
-"     return "\<C-y>"
-"   elseif (!exists('b:smart_expandtab') || b:smart_expandtab) &&
-"   \ !&l:expandtab && !search('^\s*\%#', 'nc')
-"     return repeat(' ', &l:tabstop - (virtcol('.') - 1) % &l:tabstop)
-"   endif
-"   return "\<Tab>"
-" endfunction
-" "inoremap <silent> <Plug>(adjust-indent) <ESC>==I
-" imap <silent> <expr> <Tab> <SID>tab_wrapper()
-
 " unite.vim {{{1
 "入力モード開始する
 let g:unite_enable_start_insert = 1
+let g:unite_source_file_mru_limit = 1000
+"let g:unite_source_file_mru_ignore_pattern=''
+"let g:unite_source_file_rec_ignore_pattern='\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|assets'
+
+
+
 "let g:mapleader = "\\"
 let mapleader = "0"
 "バッファ一覧
-nnoremap <silent> <Leader>b :<C-u>Unite tab buffer<CR>
+nnoremap <silent> <Leader>b :<C-u>Unite bookmark<CR>
+nnoremap <silent> <Leader>B :<C-u>Unite buffer tab<CR>
 "ファイル一覧
 nnoremap <silent> <Leader>f :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
 " レジスタ一覧
 "nnoremap <silent> <Leader>r :<C-u>Unite -buffer-name=register register<CR>
 " grep一覧
-nnoremap <silent> <Leader>g :<C-u>Unite -buffer-name=grep -auto-preview -no-quit grep<CR>
+" nnoremap <silent> <Leader>g :<C-u>Unite -buffer-name=grep -auto-preview -no-quit grep<CR>
+nnoremap <silent> <Leader>g :<C-u>Unite -buffer-name=grep -no-quit grep<CR>
 " 最近使用したファイル一覧
 nnoremap <silent> <Leader>h :<C-u>Unite -buffer-name=files file_mru<CR>
 " 常用セット
@@ -938,7 +767,7 @@ nnoremap <silent> <Leader>/ :<C-u>Unite -buffer-name=history/search history/sear
 let g:unite_source_history_yank_enable = 1
 nnoremap <silent> <Leader>y :<C-u>Unite -buffer-name=history/yank history/yank<CR>
 " unite-help
-nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help -start-insert help<CR>
+" nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help -start-insert help<CR>
 " unite-alignta
 let g:unite_source_alignta_preset_arguments = [
       \ ["Align at '='", '=>\='],
@@ -965,8 +794,8 @@ unlet mapleader
 " 00を0にする
 nnoremap <silent> 00 0
 " ブックマーク一覧
-nnoremap <silent> gn :<C-u>Unite -buffer-name=bookmark -default-action=tabopen -input=:: -immediately -start-insert bookmark<CR>
-nnoremap <silent> gN :<C-u>Unite -buffer-name=bookmark -input=:: -immediately -start-insert bookmark<CR>
+nnoremap <silent> gn :<C-u>Unite -buffer-name=bookmark -default-action=tabopen -input=:: -immediately -start-insert bookmark:bookmark<CR>
+nnoremap <silent> gN :<C-u>Unite -buffer-name=bookmark -input=:: -immediately -start-insert bookmark:bookmark<CR>
 "let mapleader = "1"
 "" outline
 "nnoremap <silent> <Leader>o :<C-u>Unite -buffer-name=outline outline -auto-preview<CR>
@@ -986,10 +815,10 @@ function! s:unite_project(...)
   execute 'Unite' opts 'file_rec:' . dir
 endfunction
 " ファイル削除時に使用するコマンドの設定
-if has('mac')
-	let g:unite_kind_file_delete_file_command="trash $srcs"
-	let g:unite_kind_file_delete_directory_command="trash $srcs"
-endif
+"if has('mac')
+"	let g:unite_kind_file_delete_file_command="trash $srcs"
+"	let g:unite_kind_file_delete_directory_command="trash $srcs"
+"endif
 
 "let g:unite_source_file_rec_ignore_pattern='\%(^\|/\)\.$\|\~$\|\.\%(o|exe|dll|bak|sw[po]\)$\|\%(^\|/\)\.\%(hg\|git\|bzr\|svn\)\%($\|/\)\|assets'
 " unite.vim上でのキーマッピング
@@ -1007,6 +836,9 @@ function! s:unite_my_settings()
  " ESCキーを2回押すと終了する
  nmap <silent><buffer> <ESC><ESC> :<C-u>q<CR>
  imap <silent><buffer> <ESC><ESC> <ESC>:<C-u>q<CR>
+ " c-h,hで上のディレクトリに
+ nmap <buffer> <C-h> <Plug>(unite_delete_backward_path)
+ nmap <buffer> h <Plug>(unite_delete_backward_path)
  " ウィンドウを分割して開く
  nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
  inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
@@ -1026,7 +858,7 @@ function! s:unite_my_settings()
 	"call unite#set_substitute_pattern('files', '[0-9A-Za-z]', ' \0', 100)
 	" oで選択したときはフォルダ展開する
 	inoremap <buffer><expr> o unite#smart_map('o', unite#do_action('default')) 
-	nnoremap <buffer><expr> o unite#do_action('default')
+	nnoremap <buffer><expr> o unite#do_action('vimfiler')
 	let l:unite = unite#get_current_unite()
 	if l:unite.buffer_name ==# 'grep'
 		nnoremap <buffer><expr> r unite#do_action('replace')
@@ -1061,6 +893,20 @@ endfunction
 "call unite#set_buffer_name_option('default', 'ignorecase', 1)
 "call unite#set_buffer_name_option('default', 'smartcase', 1)
 "let g:unite_source_file_mru_ignore_pattern='\.git'
+" unite-grep設定
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--nocolor --nogroup -S'
+let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_grep_max_candidates = 200
+
+if executable('jvgrep')
+	" For jvgrep.
+	let g:unite_source_grep_command = 'jvgrep'
+	let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|svn|hg|bzr)'''
+	let g:unite_source_grep_recursive_opt = '-R'
+endif
+" unite-grepの便利キーマップ
+vnoremap /g y:Unite grep::-iRn:<C-R>=escape(@", '\\.*$^[]')<CR><CR>
 " 特殊なmappingの設定{{{1
 augroup my_ex_mappings
 	
@@ -1072,7 +918,7 @@ augroup my_ex_mappings
 	autocmd FileType vimshell nnoremap <buffer><silent> <C-P> :<C-u>tabprevious <CR>
 	autocmd FileType vimshell nmap <buffer><silent> J <Plug>(vimshell_next_prompt)
 	autocmd FileType vimshell nmap <buffer><silent> K <Plug>(vimshell_previous_prompt)
-	" quickfix用設定(qの記録はそこまで使わないため、Qに設定) {{{1
+	" quickfix用設定(qの記録はそこまで使わないため、Qに設定)
 	"autocmd FileType * nnoremap <buffer> Q q
 	"autocmd FileType unite,vimfiler,vimshell nunmap <buffer> Q
 	"autocmd FileType * nnoremap <buffer> qj  :cnext<Return>
@@ -1124,50 +970,6 @@ function! s:define_surround_keymappings()
 	imap      <buffer><C-G>S <Plug>ISurround
 endfunction
 "autocmd my_ex_mappings FileType unite nunmap <buffer> ds
-
-" pathogen設定{{{1
-filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-set helpfile=$VIMRUNTIME/doc/help.txt
-filetype plugin on
-
-" neobundle.vim {{{1
-"set nocompatible
-"filetype off
-"
-"if has('vim_starting')
-"  set runtimepath+='~/.vim/bundle/neobundle.vim'
-"
-"  call neobundle#rc(expand('~/.vim/bundle'))
-"endif
-"
-"NeoBundle 'git://github.com/Shougo/echodoc.git'
-"NeoBundle 'git://github.com/Shougo/neocomplcache.git'
-"NeoBundle 'git://github.com/Shougo/neobundle.vim.git'
-"NeoBundle 'git://github.com/Shougo/unite.vim.git'
-"NeoBundle 'git://github.com/Shougo/vimfiler.git'
-"NeoBundle 'git://github.com/Shougo/vimshell.git'
-"NeoBundle 'git://github.com/Shougo/vimproc.git'
-"NeoBundle 'git://github.com/vim-scripts/ZoomWin.git'
-"NeoBundle 'git://github.com/mattn/gist-vim.git'
-"NeoBundle 'git://github.com/Shougo/vimshell.git'
-"NeoBundle 'git://github.com/ujihisa/quickrun.git'
-"NeoBundle 'git://github.com/ujihisa/vimshell-ssh.git'
-"NeoBundle 'git://github.com/tsukkee/unite-help.git'
-"NeoBundle 'git://github.com/h1mesuke/unite-outline.git'
-"NeoBundle 'git://github.com/h1mesuke/vim-alignta.git'
-"NeoBundle 'git://github.com/mivok/vimtodo.git'
-"NeoBundle 'git://github.com/tpope/vim-fugitive.git'
-"NeoBundle 'git://github.com/tpope/vim-surround.git'
-"NeoBundle 'git://github.com/thinca/vim-unite-history.git'
-"
-"filetype plugin on
-"filetype indent on
-
-" vimproc設定{{{1
-" let g:vimproc_dll_path = $HOME . '/.vim/autoload/proc.so'
-
 " tab設定{{{1
 set softtabstop=2
 set tabstop=2
@@ -1182,16 +984,6 @@ set shiftwidth=2
 "set diffopt+=vertical
 "半角スペースの数が比較している行で違っていてもそれを無視してdiff実行
 set diffopt+=iwhite
-
-"タブ移動リマップ
-nnoremap t gt
-nnoremap T gT
-nnoremap <Left> gT
-nnoremap <Right> gt
-nnoremap gh gT
-nnoremap gl gt
-nnoremap H gT
-nnoremap L gt
 
 "セパレートウィンドウを切り替えをリマップ
 "nnoremap <C-w> <C-w><C-w>
@@ -1210,6 +1002,7 @@ nnoremap <silent> <Leader>s :<C-u>VimShell<CR>
 nnoremap <silent> <Leader>i :<C-u>VimShellInteractive 
 "vimfilerの起動
 nnoremap <silent> <Leader>ft :<C-u>VimFilerTab<CR>
+nnoremap <silent> <Leader>fe :<C-u>VimFilerExplorer -winwidth=25 -split<CR>
 nnoremap <silent> <Leader>ff :<C-u>VimFiler<CR>
 nnoremap <silent> <Leader>f :<C-u>VimFiler<CR>
 "vimfilerdoubleの起動
@@ -1221,6 +1014,19 @@ unlet mapleader
 let g:vimfiler_as_default_explorer = 1
 " 起動時からsafeモード解除
 let g:vimfiler_safe_mode_by_default = 0
+" アイコン変更
+let g:vimfiler_tree_leaf_icon = ' '
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_enable_auto_cd = 1
+" quick lookの設定
+if has('mac')
+	" mac
+	let g:vimfiler_quick_look_command = 'qlmanage -p '
+elseif has('win')
+	" windows
+	" let g:vimfiler_quick_look_command = 'seer.exe'
+end
 " directoryを選択したときにgcpを使用するように修正
 "if has('mac')
 "  let g:unite_kind_file_copy_file_command = '/opt/local/bin/gcp -p $srcs $dest'
@@ -1231,20 +1037,25 @@ let g:vimfiler_safe_mode_by_default = 0
 autocmd FileType vimfiler call s:vimfiler_my_settings()
 function! s:vimfiler_my_settings()
 	" ファイルパス名をyank	
-	if has('win32') || has('win64') || has('gui_macvim')
-		"nnoremap <buffer> <C-g> :<C-u>let @*=vimfiler#get_filename(line('.'))<CR>
-		nmap <buffer><silent> <C-g> :<C-u>let @*=vimfiler#get_filename(line('.'))<CR>:<C-u>echo vimfiler#get_filename(line('.'))<CR>
-	else
-		"nnoremap <buffer> <C-g> :<C-u>let @"=vimfiler#get_filename(line('.'))<CR>
-		nmap <buffer><silent> <C-g> :<C-u>let @"=vimfiler#get_filename(line('.'))<CR>:<C-u>echo vimfiler#get_filename(line('.'))<CR>
-	endif
+	nmap <buffer><silent> <C-g> :<C-u>let @*=vimfiler#get_filename(line('.'))<CR>:<C-u>echo vimfiler#get_filename(line('.'))<CR>
+	if has('mac')
+		nmap <buffer><silent> <S-v> <Plug>(vimfiler_quick_look)
+	end
 endfunction
 
 " open-browser.vim {{{1
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-
+" vim-markdown {{{1
+"let g:previm_open_cmd = 'open -a Firefox'
+"fun! MyAddToFileType(ft)
+"  if index(split(&ft, '\.'), a:ft) == -1
+"    let &ft .= '.'.a:ft
+"  endif
+"endfun
+"au FileType markdown call MyAddToFileType('mkd')
+"au FileType mkd      call MyAddToFileType('markdown')
 
 " カレントウィンドウにのみ罫線を引く{{{1
 augroup cch
@@ -1278,7 +1089,7 @@ nnoremap <Leader>gd :<C-u>Gdiff<Enter>
 nnoremap <Leader>gs :<C-u>Gstatus<Enter>
 nnoremap <Leader>gl :<C-u>Glog<Enter>
 nnoremap <Leader>ga :<C-u>Gwrite<Enter>
-nnoremap <Leader>gc :<C-u>Gcommit<Enter>
+nnoremap <Leader>gc :<C-u>Gcommit -v<Enter>
 nnoremap <Leader>gC :<C-u>Git commit --amend<Enter>
 nnoremap <Leader>gb :<C-u>Gblame<Enter>
 unlet mapleader
@@ -1297,6 +1108,9 @@ nnoremap <C-g> <Esc>2<C-g>
 
 " foldmethod=markerに{{{1
 set foldmethod=marker
+" marker設定
+set commentstring=\ %s
+set foldmarker={{{,}}}
 " :mes で出てくるメッセージは適当にクリップボードにコピーする。 in Vim - Humanity{{{1
 " http://d.hatena.ne.jp/tyru/20110624/copy_messages_to_clipboard
 command! MessCopy call s:messcopy()
@@ -1370,6 +1184,7 @@ cnoremap <C-n> <Down>
 cnoremap <Down> <C-n>
 
 " vimtodo.vim{{{1
+set runtimepath+=$HOME/.vim/bundle/vimtodo
 let g:todo_checkbox_states = [
         \[" ", "X", "-"]]
 " vimtodo.vim上でのキーマッピング
@@ -1386,9 +1201,15 @@ function! s:todo_my_settings()
   nmap <buffer> 9s <Plug>TodoNextTaskState
   nmap <buffer> 9v <Plug>TodoPromptTaskState
   nmap <buffer> 9c <Plug>TodoCheckboxToggle
+"   unmap <Space>
+  nmap <buffer> <space> <Plug>TodoCheckboxToggle
   nmap <buffer> 9b <Plug>TodoInsertCheckbox
-  nmap <buffer> 9n oTODO ds<Space>
+  nmap <buffer> 9n oTODO ds<Space>+<Space>{{{1<Esc>T+i
+  " iabbrev <buffer> cc [ ]<Space>{{{2<Esc>T]i
   iabbrev <buffer> cc [ ]
+	" vimtodoのを上書き
+exe 'iab <buffer> cn '.vimtodo#TodoParseTaskState(g:todo_states[0][0])["state"].
+            \' <C-R>=strftime("%Y-%m-%d")<CR>'.'<Space>+ {{{1<Esc>T+i'
   nnoremap <buffer><silent> 99 9
 	nmap <buffer><silent> J /\<TODO[^:]<CR>
 	nmap <buffer><silent> K ?\<TODO[^:]<CR>
@@ -1417,23 +1238,23 @@ if (has('win32') || has('win64')) && filereadable(expand('~/.vimrc.win'))
 	source ~/.vimrc.win
 endif
 
-" vim-altercmd {{{1
-call altercmd#load()
-command!
-\ -bar -nargs=+
-\ MapAlterCommand
-\ CAlterCommand <args> | AlterCommand <cmdwin> <args>
-
-" restart.vim {{{1
-command!
-\ -bar
-\ RestartWithSession
-\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages'
-\ | Restart
-
-MapAlterCommand res[tart] Restart
-MapAlterCommand ers[tart] Restart
-MapAlterCommand rse[tart] Restart
+" vim-altercmd *動かないかも {{{1
+"call altercmd#load()
+"command!
+"\ -bar -nargs=+
+"\ MapAlterCommand
+"\ CAlterCommand <args> | AlterCommand <cmdwin> <args>
+"
+"" restart.vim {{{1
+"command!
+"\ -bar
+"\ RestartWithSession
+"\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages'
+"\ | Restart
+"
+"MapAlterCommand res[tart] Restart
+"MapAlterCommand ers[tart] Restart
+"MapAlterCommand rse[tart] Restart
 
 " gfで開けるファイルを増やす {{{1
 autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') | setlocal path+=;/
@@ -1465,10 +1286,10 @@ autocmd FileType html,php setlocal includeexpr=substitute(v:fname,'^\\/','','') 
 " 閉じタグの補完{{{1
 augroup MyCloseTag
   autocmd!
-  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
-  autocmd Filetype php inoremap <buffer> </ </<C-x><C-o>
+"   autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+"   autocmd Filetype php inoremap <buffer> </ </<C-x><C-o>
   autocmd Filetype php inoremap <buffer> __ __('')<Left><Left>
-  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+"   autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
 augroup END
 " カーソルキーで行末／行頭の移動可能に設定{{{1
 "set whichwrap=b,s,[,],<,>
@@ -1543,8 +1364,12 @@ if has('persistent_undo')
 endif
 
 " thinca/poslist.vim {{{1
-nmap <C-o> <Plug>(poslist-prev-line)
-nmap <C-i> <Plug>(poslist-next-line)
+" let g:poslist_histsize = 1000
+" let g:poslist_lines = 500
+" nmap <C-o> <Plug>(poslist-prev-line)
+" nmap <C-i> <Plug>(poslist-next-line)
+"nnoremap <C-Tab> <Plug>(poslist-prev-buf)
+"nnoremap <C-S-Tab> <Plug>(poslist-next-buf)
 
 " last two digit move {{{1
 " ujihisa/config/_vimrc
@@ -1579,4 +1404,107 @@ unlet mapleader
 
 " sonictemplate-vim{{{1
 let g:sonictemplate_vim_template_dir = '$HOME/.vim/template'
+
+" columnjump{{{1
+"map <c-k> <Plug>(columnjump-backward)
+"map <c-j> <Plug>(columnjump-forward)
+
+" tabのディレクトリ管理をタブ単位で行う{{{1
+" http://labs.timedia.co.jp/2012/05/vim-tabpagecd.html
+augroup plugin-tabpagecd
+  autocmd!
+
+  autocmd TabEnter *
+  \   if exists('t:cwd')
+  \ |   cd `=fnameescape(t:cwd)`
+  \ | endif
+
+  autocmd TabLeave *
+  \   let t:cwd = getcwd()
+augroup END
+
+" quickrun設定{{{1
+" let g:quickrun_config = {}
+" 
+" if strlen($rvm_bin_path)
+" 	let g:quickrun_config['ruby'] = {
+" \		'command': 'ruby',
+" \		'exec': '$rvm_bin_path/ruby %s',
+" \		'tempfile': '{tempname()}.rb'
+" \	}
+" endif
+" yankround.vim設定{{{1
+nmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
+
+" matchit有効化{{{1
+if !exists('loaded_matchit')
+  " matchitを有効化
+  runtime macros/matchit.vim
+endif
+" ctrlp with ag {{{1
+" ag入ってたらagで検索させる
+" ついでにキャッシュファイルからの検索もさせない
+if executable('ag')
+  let g:ctrlp_use_caching = 0
+  let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup -g ""'
+endif
+
+" memolist {{{1
+"" tags prompt (default 0)
+"let g:memolist_prompt_tags = 1
+"" categories prompt (default 0)
+"let g:memolist_prompt_categories = 1
+"" use qfixgrep (default 0)
+"let g:memolist_qfixgrep = 1
+"
+"" use vimfler (default 0)
+"let g:memolist_vimfiler = 1
+"
+"" remove filename prefix (default 0)
+"let g:memolist_filename_prefix_none = 1
+
+" use unite (default 0)
+let g:memolist_unite = 1
+
+" use arbitrary unite source (default is 'file')
+"let g:memolist_unite_source = "file_rec"
+
+" use arbitrary unite option (default is empty)
+let g:memolist_unite_option = "-auto-preview -start-insert"
+
+"" use denite (default 0)
+"let g:memolist_denite = 1
+"
+"" use arbitrary denite source (default is 'file_rec')
+"let g:memolist_denite_source = "anything"
+"
+"" use arbitrary denite option (default is empty)
+"let g:memolist_denite_option = "anything"
+"
+"" use various Ex commands (default '')
+"let g:memolist_ex_cmd = 'CtrlP'
+"let g:memolist_ex_cmd = 'NERDTree'
+
+"" use delimiter of array in yaml front matter (default is ' ')
+"let g:memolist_delimiter_yaml_array = ','
+"
+"" use when get items from yaml front matter
+"  " first line string pattern of yaml front matter (default "==========")
+"  let g:memolist_delimiter_yaml_array = "---"
+"
+"  " last line string pattern of yaml front matter (default "- - -")
+"  let g:memolist_delimiter_yaml_array = "-
+
+cab mm MemoNew
+cab ml MemoList
+cab mg MemoGrep
+
+autocmd Filetype mkd.markdown setlocal foldlevel=2
+"autocmd Filetype preview setlocal foldlevel=2
+"autocmd Filetype preview setlocal foldopen=all
+"setlocal foldlevel=2
+
 
